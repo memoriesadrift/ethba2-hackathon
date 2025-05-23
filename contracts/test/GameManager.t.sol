@@ -64,7 +64,8 @@ contract GameManagerTest is Test {
         assertFalse(isRegistered);
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
-            0
+            0,
+            "Player should have 0 tokens after leaving the competition"
         );
         assertEq(leftAt, block.timestamp);
         vm.stopPrank();
