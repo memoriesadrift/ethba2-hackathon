@@ -31,17 +31,13 @@ contract GameManager is Ownable {
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
-        tokenManager.mint(msg.sender, testUSDCTokenId, 100 ether);
+        tokenManager.mint(msg.sender, testUSDCTokenId, 1e6);
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
 
     function leaveCompetition() external {
         require(players[msg.sender].isRegistered, "Not registered");
-        tokenManager.burn(
-            msg.sender,
-            testUSDCTokenId,
-            tokenManager.balanceOf(msg.sender, testUSDCTokenId)
-        );
+        tokenManager.removeUserHoldings(msg.sender);
         players[msg.sender].isRegistered = false;
         players[msg.sender].leftAt = block.timestamp;
         emit PlayerLeft(msg.sender, players[msg.sender].leftAt);

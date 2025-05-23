@@ -76,9 +76,9 @@ contract TokenManager is ERC1155, Ownable {
     /**
      * @dev removes all of the caller's holdings, if they wish to start over or something
      */
-    function removeUserHoldings() public {
+    function removeUserHoldings(address user) public onlyMintAuthority {
         for (uint256 id = 0; id < nextFreeTokenId; id++) {
-            burn(msg.sender, id, balanceOf(msg.sender, id));
+            burn(user, id, balanceOf(user, id));
         }
     }
 

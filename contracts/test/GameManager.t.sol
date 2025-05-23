@@ -38,7 +38,7 @@ contract GameManagerTest is Test {
         assertEq(score, 0);
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
-            100 ether
+            1e6
         );
         vm.stopPrank();
     }
@@ -53,6 +53,10 @@ contract GameManagerTest is Test {
             uint256 score
         ) = gameManager.players(player);
         assertTrue(isRegistered);
+        assertEq(
+            tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
+            1e6
+        );
         gameManager.leaveCompetition();
         (isRegistered, registeredAt, leftAt, score) = gameManager.players(
             player
