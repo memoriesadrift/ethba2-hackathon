@@ -20,7 +20,7 @@ contract GameManagerTest is Test {
     function setUp() public {
         tokenManager = new TokenManager("");
         gameManager = new GameManager(address(tokenManager));
-        tokenManager.createNewToken(address(token));
+        tokenManager.createNewToken(address(token), "USD Coin", "USDC", 6);
         tokenManager.addMintAuthority(address(gameManager));
     }
 
@@ -30,7 +30,7 @@ contract GameManagerTest is Test {
         (
             bool isRegistered,
             uint256 registeredAt,
-            uint256 leftAt,
+            ,
             uint256 score
         ) = gameManager.players(player);
         assertTrue(isRegistered);

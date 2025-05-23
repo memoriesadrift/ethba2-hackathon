@@ -39,14 +39,14 @@ contract TokenManager is ERC1155, Ownable {
     /**
      * @notice Creates a new mocked token based on a real token address
      */
-    function createNewToken(address token) public onlyOwner returns (uint256) {
+    function createNewToken(address token, string memory name, string memory symbol, uint8 decimals) public onlyOwner returns (uint256) {
         uint256 tokenId = nextFreeTokenId;
 
         // Save token metadata
         realTokenAddress[tokenId] = token;
-        tokenNames[tokenId] = IERC20Metadata(token).name();
-        tokenSymbols[tokenId] = IERC20Metadata(token).symbol();
-        tokenDecimals[tokenId] = IERC20Metadata(token).decimals();
+        tokenNames[tokenId] = name;
+        tokenSymbols[tokenId] = symbol;
+        tokenDecimals[tokenId] = decimals;
 
         nextFreeTokenId++;
 
