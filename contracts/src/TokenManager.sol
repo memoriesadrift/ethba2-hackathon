@@ -28,10 +28,15 @@ contract TokenManager is ERC1155, Ownable {
         _;
     }
 
+    /// @dev Adds a new mint authority, enabling them to mint and burn tokens 
+    function addMintAuthority(address newAuthority) public onlyOwner {
+        _mintAuthority[newAuthority] = true;
+    }
+
     /**
       * @notice Creates a new mocked token based on a real token address
-    */
-    function createNewToken(address token) public onlyOwner() returns (uint256) {
+      */
+    function createNewToken(address token) public onlyOwner returns (uint256) {
         require(
             IERC165(token).supportsInterface(type(IERC20).interfaceId), 
             "Token doesn't support IERC20!"
@@ -54,9 +59,25 @@ contract TokenManager is ERC1155, Ownable {
         return tokenId;
     }
 
-    function mint() public onlyMintAuthority() {}
-    function burn() public onlyMintAuthority() {}
+    function mint(address to, uint256 id, uint256 value) public onlyMintAuthority {
+        _mint(to, id, value, bytes("0"));
+    }
+
+    function burn(address from, uint256 id, uint256 value) public onlyMintAuthority {
+        _burn(from, id, value);
+    }
+
+    // TODO: Use our uniswap clone to swap the tokens to USDC at market rate
+    // Used when a user submits their earnings to the competition
     function consolidate() public {}
-    function annulUserHoldings() public {}
+
+    /** 
+      * @dev removes all of the caller's holdings, if they wish to start over or something
+      */
+    function removeUserHoldings() public {
+        for (uint256 id = 0; id < nextFreeTokenId; id++) {
+            burn(msg.sender, id, balanceOf(msg.sender, id));
+        }
+    }
 }
 
