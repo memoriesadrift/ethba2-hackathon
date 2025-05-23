@@ -10,7 +10,7 @@ export const AssetCell = ({ text, imageUrl }: Props) => (
     <div className="relative w-10 h-10 rounded-full overflow-hidden">
       <Image
         src={imageUrl}
-        alt="Room Thumbnail"
+        alt={`Image of ${text}`}
         objectFit="cover"
         layout="fill"
       />
