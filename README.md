@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Getting Started
 
 First, make sure you're using the correct node version
+
 ```bash
 nvm use
 ```

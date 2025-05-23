@@ -1,36 +1,32 @@
-"use client"
+"use client";
 
-import { usePrivy } from "@privy-io/react-auth"
-import { useAccount } from "wagmi"
-import { Check, CopyIcon } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { usePrivy } from "@privy-io/react-auth";
+import { useAccount } from "wagmi";
+import { Check, CopyIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 const formatAddress = (address: string) => {
-  return `${address.slice(0, 5)}...${address.slice(-4)}`
-}
+  return `${address.slice(0, 5)}...${address.slice(-4)}`;
+};
 
 export const ConnectWalletButton = () => {
-  const { login, ready, authenticated } = usePrivy()
-  const { address: userAddress } = useAccount()
-  const [isCopied, setIsCopied] = useState(false)
-  const isLoggedIn = ready && authenticated && userAddress
+  const { login, ready, authenticated } = usePrivy();
+  const { address: userAddress } = useAccount();
+  const [isCopied, setIsCopied] = useState(false);
+  const isLoggedIn = ready && authenticated && userAddress;
 
   if (!isLoggedIn) {
-    return (
-      <Button onClick={login}>
-        Connect Wallet
-      </Button>
-    )
+    return <Button onClick={login}>Connect Wallet</Button>;
   }
 
   const copyAddressToClipboard = () => {
-    navigator.clipboard.writeText(userAddress)
-    setIsCopied(true)
+    navigator.clipboard.writeText(userAddress);
+    setIsCopied(true);
     setTimeout(() => {
-      setIsCopied(false)
-    }, 2000)
-  }
+      setIsCopied(false);
+    }, 2000);
+  };
 
   return (
     <Button variant="secondary" onClick={copyAddressToClipboard}>
@@ -39,5 +35,5 @@ export const ConnectWalletButton = () => {
         {isCopied ? <Check /> : <CopyIcon />}
       </div>
     </Button>
-  )
-}
+  );
+};
