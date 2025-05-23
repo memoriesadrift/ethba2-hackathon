@@ -43,5 +43,8 @@ next-env.d.ts
 
 # LSP generated file
 soljson-latest.js
-
 .idea
+
+# Contract builds
+contracts/cache/
+contracts/out/
