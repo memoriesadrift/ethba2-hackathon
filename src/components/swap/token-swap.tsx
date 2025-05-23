@@ -54,7 +54,7 @@ export default function TokenSwap() {
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="rounded-xlp-4">
+        <div className="rounded-xl">
           <div className="flex justify-between mb-2">
             <span className="text-sm">From</span>
             <span className="text-sm ">
