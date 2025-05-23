@@ -4,7 +4,7 @@ pragma solidity ^0.8.30;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-//TODO upgrade when token manager is added
+// TODO: upgrade when token manager is added
 interface TokenManager {
 
 }
@@ -26,18 +26,18 @@ contract GameManager is Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    function register() external {
+    function enterCompetition() external {
         require(!players[msg.sender].isRegistered, "Already registered");
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
-        // TODO call token manager to mint test token
+        // TODO: call token manager to mint test token
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
 
     function leaveCompetition() external {
         require(players[msg.sender].isRegistered, "Not registered");
-        // TODO call token manager to burn full use's balance of test token
+        // TODO: call token manager to burn full use's balance of test token
         players[msg.sender].isRegistered = false;
         players[msg.sender].leftAt = block.timestamp;
         emit PlayerLeft(msg.sender, players[msg.sender].leftAt);
