@@ -1,0 +1,29 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.26;
+
+import "forge-std/Script.sol";
+import "forge-std/StdJson.sol";
+
+// ! Important: Keep struct fields in this file in alphabetical order.
+// See https://book.getfoundry.sh/cheatcodes/parse-json#decoding-json-objects-into-solidity-structs
+
+// ======= Autonom mainnet contracts =======
+struct UniV2Deployment {
+    address factory;
+    address v2Router02;
+}
+
+contract IOUtils is Script {
+    string deploymentDir;
+
+    constructor() {
+        string memory deploymentName = vm.envString("DEPLOYMENT");
+        deploymentDir = string.concat(vm.projectRoot(), "/addresses/", deploymentName, "/");
+    }
+
+    function readUniV2Deployment() internal view returns (UniV2Deployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "original/uniswapv2.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (UniV2Deployment));
+    }
+}
