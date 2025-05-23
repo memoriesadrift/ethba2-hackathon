@@ -4,14 +4,13 @@ pragma solidity ^0.8.30;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-interface GameToken is IERC20 {
-    function mint(address to, uint256 amount) external;
+//TODO upgrade when token manager is added
+interface TokenManager {
 
-    function burn(address from, uint256 amount) external;
 }
 
 contract GameManager is Ownable {
-    GameToken public testETH;
+    TokenManager public testETH;
 
     struct Player {
         bool isRegistered;
@@ -25,22 +24,20 @@ contract GameManager is Ownable {
     event PlayerRegistered(address indexed player, uint256 registeredAt);
     event PlayerLeft(address indexed player, uint256 leftAt);
 
-    constructor(GameToken _testETH) Ownable(msg.sender) {
-        testETH = _testETH;
-    }
+    constructor() Ownable(msg.sender) {}
 
     function register() external {
         require(!players[msg.sender].isRegistered, "Already registered");
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
-        testETH.mint(msg.sender, 100 ether);
+        // TODO call token manager to mint test token
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
 
     function leaveCompetition() external {
         require(players[msg.sender].isRegistered, "Not registered");
-        testETH.burn(msg.sender, testETH.balanceOf(msg.sender));
+        // TODO call token manager to burn full use's balance of test token
         players[msg.sender].isRegistered = false;
         players[msg.sender].leftAt = block.timestamp;
         emit PlayerLeft(msg.sender, players[msg.sender].leftAt);
