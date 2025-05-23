@@ -9,3 +9,9 @@ UNI_ROUTER=$(jq -r ".v2Router02" contracts/addresses/base/original/uniswapv2.jso
 cast call $UNI_FACTORY "allPairsLength()(uint256)"
 cast call $UNI_FACTORY "allPairs(uint256)(address)" 0
 cast call $UNI_ROUTER "factory()(address)"
+
+Verify _our clone_ deployment of UniswapV2:
+
+UNI_FACTORY_CLONE=$(jq -r ".factory" contracts/addresses/base/clone/uniswapv2.json)
+cast call $UNI_FACTORY "allPairsLength()(uint256)"
+cast call $UNI_FACTORY "allPairs(uint256)(address)" 0
