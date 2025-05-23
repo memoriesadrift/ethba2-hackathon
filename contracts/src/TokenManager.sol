@@ -24,33 +24,27 @@ contract TokenManager is ERC1155, Ownable {
     mapping(address => bool) private _mintAuthority;
 
     modifier onlyMintAuthority() {
-        require(_mintAuthority[msg.sender] == true, "Only mint authority can call this method!");
+        require(
+            _mintAuthority[msg.sender] == true,
+            "Only mint authority can call this method!"
+        );
         _;
     }
 
-    /// @dev Adds a new mint authority, enabling them to mint and burn tokens 
+    /// @dev Adds a new mint authority, enabling them to mint and burn tokens
     function addMintAuthority(address newAuthority) public onlyOwner {
         _mintAuthority[newAuthority] = true;
     }
 
     /**
-      * @notice Creates a new mocked token based on a real token address
-      */
+     * @notice Creates a new mocked token based on a real token address
+     */
     function createNewToken(address token) public onlyOwner returns (uint256) {
-        require(
-            IERC165(token).supportsInterface(type(IERC20).interfaceId), 
-            "Token doesn't support IERC20!"
-        );
-        require(
-            IERC165(token).supportsInterface(type(IERC20Metadata).interfaceId), 
-            "Token doesn't support IERC20Metadata!"
-        );
-
         uint256 tokenId = nextFreeTokenId;
 
         // Save token metadata
         realTokenAddress[tokenId] = token;
-        tokenNames[tokenId] =  IERC20Metadata(token).name();
+        tokenNames[tokenId] = IERC20Metadata(token).name();
         tokenSymbols[tokenId] = IERC20Metadata(token).symbol();
         tokenDecimals[tokenId] = IERC20Metadata(token).decimals();
 
@@ -59,11 +53,19 @@ contract TokenManager is ERC1155, Ownable {
         return tokenId;
     }
 
-    function mint(address to, uint256 id, uint256 value) public onlyMintAuthority {
+    function mint(
+        address to,
+        uint256 id,
+        uint256 value
+    ) public onlyMintAuthority {
         _mint(to, id, value, bytes("0"));
     }
 
-    function burn(address from, uint256 id, uint256 value) public onlyMintAuthority {
+    function burn(
+        address from,
+        uint256 id,
+        uint256 value
+    ) public onlyMintAuthority {
         _burn(from, id, value);
     }
 
@@ -71,9 +73,9 @@ contract TokenManager is ERC1155, Ownable {
     // Used when a user submits their earnings to the competition
     function consolidate() public {}
 
-    /** 
-      * @dev removes all of the caller's holdings, if they wish to start over or something
-      */
+    /**
+     * @dev removes all of the caller's holdings, if they wish to start over or something
+     */
     function removeUserHoldings() public {
         for (uint256 id = 0; id < nextFreeTokenId; id++) {
             burn(msg.sender, id, balanceOf(msg.sender, id));
@@ -81,8 +83,20 @@ contract TokenManager is ERC1155, Ownable {
     }
 
     /// @dev overridden to disable transferring, for a fair competition
-    function safeTransferFrom(address from, address to, uint256 id, uint256 value, bytes memory data) override public {}
-    /// @dev overridden to disable transferring, for a fair competition
-    function safeBatchTransferFrom(address from, address to, uint256[] memory ids, uint256[] memory values, bytes memory data) override public {}
-}
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 id,
+        uint256 value,
+        bytes memory data
+    ) public override {}
 
+    /// @dev overridden to disable transferring, for a fair competition
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory values,
+        bytes memory data
+    ) public override {}
+}
