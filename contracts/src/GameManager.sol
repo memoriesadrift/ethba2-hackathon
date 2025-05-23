@@ -33,6 +33,7 @@ contract GameManager is Ownable {
         require(!players[msg.sender].isRegistered, "Already registered");
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
+        players[msg.sender].score = 0;
         testETH.mint(msg.sender, 100 ether);
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
