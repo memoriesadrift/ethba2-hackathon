@@ -13,8 +13,10 @@ cast call $UNI_ROUTER "factory()(address)"
 Verify _our clone_ deployment of UniswapV2:
 
 UNI_FACTORY_CLONE=$(jq -r ".factory" contracts/addresses/base/clone/uniswapv2.json)
-cast call $UNI_FACTORY "allPairsLength()(uint256)"
-cast call $UNI_FACTORY "allPairs(uint256)(address)" 0
+UNI_ROUTER_CLONE=$(jq -r ".v2Router02" contracts/addresses/base/clone/uniswapv2.json)
+cast call $UNI_FACTORY_CLONE "allPairsLength()(uint256)"
+cast call $UNI_FACTORY_CLONE "allPairs(uint256)(address)" 0
+cast call $UNI_ROUTER_CLONE "factory()(address)"
 
 Verify deployment of our core contracts:
 GAME_MANAGER=$(jq -r ".gameManager" contracts/addresses/base/core.json)
