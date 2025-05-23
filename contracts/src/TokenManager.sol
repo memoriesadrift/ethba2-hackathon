@@ -37,15 +37,6 @@ contract TokenManager is ERC1155, Ownable {
       * @notice Creates a new mocked token based on a real token address
       */
     function createNewToken(address token) public onlyOwner returns (uint256) {
-        require(
-            IERC165(token).supportsInterface(type(IERC20).interfaceId), 
-            "Token doesn't support IERC20!"
-        );
-        require(
-            IERC165(token).supportsInterface(type(IERC20Metadata).interfaceId), 
-            "Token doesn't support IERC20Metadata!"
-        );
-
         uint256 tokenId = nextFreeTokenId;
 
         // Save token metadata
