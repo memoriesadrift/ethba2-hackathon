@@ -42,3 +42,5 @@ next-env.d.ts
 
 # LSP generated file
 soljson-latest.js
+
+.idea
