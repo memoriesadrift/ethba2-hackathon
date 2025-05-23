@@ -1,0 +1,36 @@
+.container.container > button {
+  position: relative;
+  background-color: #121212;
+  color: white;
+  height: 32px;
+  font-size: 12px;
+  border-radius: 9999px;
+  padding: 7px 28px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #daff80;
+    color: #121212;
+  }
+
+  &:disabled {
+    background: #0000000a;
+    color: #00000029;
+    cursor: unset;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 7px 16px;
+
+    .container[data-connected="true"] &::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: green;
+      border-radius: 50%;
+      top: 5px;
+      right: 10px;
+    }
+  }
+}

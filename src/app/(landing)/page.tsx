@@ -1,7 +1,5 @@
-import { About } from "./_components/About";
 import { Cta } from "./_components/Cta";
 import { FAQ } from "./_components/FAQ";
-import { Footer } from "./_components/Footer";
 import { Hero } from "./_components/Hero";
 import { HowItWorks } from "./_components/HowItWorks";
 import { ScrollToTop } from "./_components/ScrollToTop";
@@ -14,13 +12,11 @@ export default function Page() {
     <>
       <Hero />
       <Sponsors />
-      <About />
       <HowItWorks />
       <Services />
       <Cta />
       <Team />
       <FAQ />
-      <Footer />
       <ScrollToTop />
     </>
   );

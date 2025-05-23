@@ -54,6 +54,10 @@
 
     --radius: 1rem;
   }
+
+  .container {
+    margin-inline: auto;
+  }
 }
 
 @layer base {
@@ -62,9 +66,6 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-
-  .container {
-    margin-inline: auto;
+    font-family: var(--font-geist-sans);
   }
 }

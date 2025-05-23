@@ -15,10 +15,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-import { SiGithub } from "@icons-pack/react-simple-icons";
 import { buttonVariants } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { ConnectWalletButton } from "./connect-wallet-button";
+import Link from "next/link";
 
 interface RouteProps {
   href: string;
@@ -26,6 +26,10 @@ interface RouteProps {
 }
 
 const routeList: RouteProps[] = [
+  {
+    href: "/dashboard",
+    label: "Dashboard",
+  },
   {
     href: "#features",
     label: "Features",
@@ -39,24 +43,21 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <header className="sticky border-b-[1px] top-0 z-40 w-full border-b-slate-700 bg-background">
+    <header className="sticky border-b-[1px] top-0 z-40 w-full flex border-b-slate-700 bg-background">
       <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
-          <NavigationMenuItem className="font-bold flex">
-            <a
-              rel="noreferrer noopener"
+        <NavigationMenuList className="container w-[calc(100vw_-_16px)] h-14 px-4 flex justify-between ">
+          <NavigationMenuItem className="font-bold flex ">
+            <Link
               href="/"
-              className="ml-2 font-bold text-xl flex"
+              className="ml-2 font-bold text-xl flex items-center"
             >
-              <LogoIcon className="size-8 mr-2 fill-white" />
+              <LogoIcon className="size-10 mr-2 fill-white" />
               Sandboxify
-            </a>
+            </Link>
           </NavigationMenuItem>
 
           {/* mobile */}
           <span className="flex md:hidden">
-            <ConnectWalletButton />
-
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger className="px-2">
                 <Menu
@@ -68,32 +69,21 @@ export const Navbar = () => {
               <SheetContent side={"left"}>
                 <SheetHeader>
                   <SheetTitle className="font-bold text-xl">
-                    Shadcn/React
+                    Sandboxify
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2 mt-4">
                   {routeList.map(({ href, label }: RouteProps) => (
-                    <a
-                      rel="noreferrer noopener"
+                    <Link
                       key={label}
                       href={href}
                       onClick={() => setIsOpen(false)}
                       className={buttonVariants({ variant: "ghost" })}
                     >
                       {label}
-                    </a>
+                    </Link>
                   ))}
-                  <a
-                    rel="noreferrer noopener"
-                    href="https://github.com/leoMirandaa/shadcn-landing-page.git"
-                    target="_blank"
-                    className={`w-[110px] border ${buttonVariants({
-                      variant: "secondary",
-                    })}`}
-                  >
-                    <SiGithub className="mr-2 w-5 h-5" />
-                    Github
-                  </a>
+                  <ConnectWalletButton />
                 </nav>
               </SheetContent>
             </Sheet>
@@ -102,8 +92,7 @@ export const Navbar = () => {
           {/* desktop */}
           <nav className="hidden md:flex gap-2">
             {routeList.map((route: RouteProps, i) => (
-              <a
-                rel="noreferrer noopener"
+              <Link
                 href={route.href}
                 key={i}
                 className={`text-[17px] ${buttonVariants({
@@ -111,21 +100,11 @@ export const Navbar = () => {
                 })}`}
               >
                 {route.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
           <div className="hidden md:flex gap-2">
-            <a
-              rel="noreferrer noopener"
-              href="https://github.com/leoMirandaa/shadcn-landing-page.git"
-              target="_blank"
-              className={`border ${buttonVariants({ variant: "secondary" })}`}
-            >
-              <SiGithub className="mr-2 w-5 h-5" />
-              Github
-            </a>
-
             <ConnectWalletButton />
           </div>
         </NavigationMenuList>
