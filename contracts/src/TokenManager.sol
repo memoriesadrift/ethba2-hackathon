@@ -79,5 +79,10 @@ contract TokenManager is ERC1155, Ownable {
             burn(msg.sender, id, balanceOf(msg.sender, id));
         }
     }
+
+    /// @dev overridden to disable transferring, for a fair competition
+    function safeTransferFrom(address from, address to, uint256 id, uint256 value, bytes memory data) override public {}
+    /// @dev overridden to disable transferring, for a fair competition
+    function safeBatchTransferFrom(address from, address to, uint256[] memory ids, uint256[] memory values, bytes memory data) override public {}
 }
 
