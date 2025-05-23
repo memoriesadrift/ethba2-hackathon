@@ -13,10 +13,9 @@ anvil --chain-id 8453 --fork-url "https://mainnet.base.org" &
 ANVIL_PID=$!
 
 sleep 5
-echo "$PWD"
-echo "Before deployment"
 forge script script/deploy/Uniswapv2.s.sol:Deploy \
     --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
-echo "After deployment"
+forge script script/deploy/Core.s.sol:Deploy \
+    --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
 
 wait $ANVIL_PID
