@@ -2,7 +2,7 @@
 pragma solidity ^0.8.30;
 
 import {Test, console} from "forge-std/Test.sol";
-import {AaveProtocolDataProvider} from '@aave-v3/contracts/helpers/AaveProtocolDataProvider.sol';
+import {AaveProtocolDataProvider} from "@aave-v3/contracts/helpers/AaveProtocolDataProvider.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 import {TokenManager} from "../src/TokenManager.sol";
@@ -28,10 +28,20 @@ contract AaveTest is Test {
             address(tokenManager),
             address(0xC4Fcf9893072d61Cc2899C0054877Cb752587981)
         );
-        tokenManager.createNewToken(address(0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913), "USD Coin", "USDC", 6);
+        tokenManager.createNewToken(
+            address(0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913),
+            "USD Coin",
+            "USDC",
+            6
+        );
         tokenManager.addMintAuthority(address(gameManager));
         tokenManager.addMintAuthority(address(aave));
-        tokenManager.createNewToken(address(69), "AAVE Supplied USD Coin", "aUSDC", 6);
+        tokenManager.createNewToken(
+            address(69),
+            "AAVE Supplied USD Coin",
+            "aUSDC",
+            6
+        );
         aave.addSupportedAsset(0, 1);
     }
 
@@ -47,19 +57,13 @@ contract AaveTest is Test {
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
             0
         );
-        assertEq(
-            tokenManager.balanceOf(player, 1),
-            1e6
-        );
+        assertEq(tokenManager.balanceOf(player, 1), 1e6);
         aave.withdraw(1, 1e6);
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
             1e6
         );
-        assertEq(
-            tokenManager.balanceOf(player, 1),
-            0
-        );
+        assertEq(tokenManager.balanceOf(player, 1), 0);
 
         vm.stopPrank();
     }
