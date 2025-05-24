@@ -5,7 +5,11 @@ import { useAccount, useReadContracts } from "wagmi";
 export const Tokens = {
   USCD: 0n,
   ETH: 1n,
-  wstETH: 2n,
+  dino: 2n,
+  virtualProtocol: 3n,
+  // other
+  wstETH: 4n,
+
 } as const
 
 export const useFakeBalance = (token: keyof typeof Tokens | bigint) => {
