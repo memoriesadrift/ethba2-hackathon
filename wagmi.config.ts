@@ -10,9 +10,10 @@ export default defineConfig({
         "GameManager": addresses.gameManager as `0x${string}`,
         "TokenManager": addresses.tokenManager as `0x${string}`,
         "LidoClone": addresses.lidoClone as `0x${string}`,
+        "AaveV3PoolClone": addresses.aaveV3PoolClone as `0x${string}`,
       },
       project: "./contracts",
-      include: ["GameManager.sol/**", "TokenManager.sol/**", "LidoClone.sol/**"],
+      include: ["GameManager.sol/**", "TokenManager.sol/**", "LidoClone.sol/**", "AaveV3PoolClone.sol/**", "UniswapV2FactoryClone.sol/**"],
     }),
     react()
   ],

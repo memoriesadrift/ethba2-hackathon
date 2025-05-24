@@ -28,6 +28,12 @@ import {
   Zap,
   DollarSign,
 } from "lucide-react";
+import { Tokens, useFakeBalance } from "@/lib/hooks/use-balance";
+import {
+  useWriteAaveV3PoolCloneSupply,
+  useWriteAaveV3PoolCloneWithdraw,
+} from "@/abi";
+import { parseEther } from "viem";
 
 interface AssetType {
   symbol: string;
@@ -43,6 +49,7 @@ interface AssetType {
   borrowed: string;
   ltv: number;
   canBeCollateral: boolean;
+  id: bigint; // Unique identifier for the asset
 }
 
 const assets: AssetType[] = [
@@ -60,6 +67,7 @@ const assets: AssetType[] = [
     borrowed: "0",
     ltv: 82.5,
     canBeCollateral: true,
+    id: 1n,
   },
   {
     symbol: "USDC",
@@ -77,6 +85,7 @@ const assets: AssetType[] = [
     borrowed: "0",
     ltv: 87.0,
     canBeCollateral: true,
+    id: 0n,
   },
   {
     symbol: "WBTC",
@@ -98,6 +107,7 @@ const assets: AssetType[] = [
     borrowed: "0",
     ltv: 75.0,
     canBeCollateral: true,
+    id: 3n,
   },
 ];
 
@@ -224,16 +234,30 @@ const AssetActionDialogContent: React.FC<AssetActionDialogContentProps> = ({
   isSupplyMode,
   healthFactor,
 }) => {
+  const { data: balance, isLoading } = useFakeBalance(asset.id);
   const [amount, setAmount] = useState("");
   const [useAsCollateral, setUseAsCollateral] = useState(asset.canBeCollateral);
+  const { writeContract: supply } = useWriteAaveV3PoolCloneSupply();
+  const { writeContract: withdraw } = useWriteAaveV3PoolCloneWithdraw();
 
+  const onAction = (amount: string, useAsCollateral?: boolean) => {
+    if (isSupplyMode) {
+      supply({
+        args: [asset.id, parseEther(amount)],
+      });
+    } else {
+      withdraw({
+        args: [asset.id, parseEther(amount)],
+      });
+    }
+    // Close dialog after action
+  };
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <Label>Amount</Label>
         <div className="relative">
           <Input
-            type="number"
             placeholder="0.00"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
@@ -312,7 +336,9 @@ const AssetActionDialogContent: React.FC<AssetActionDialogContentProps> = ({
             ? "bg-blue-600 hover:bg-blue-700"
             : "bg-red-600 hover:bg-red-700"
         }`}
-        // onClick={() => onAction(amount, isSupplyMode ? useAsCollateral : undefined)}
+        onClick={() =>
+          onAction(amount, isSupplyMode ? useAsCollateral : undefined)
+        }
       >
         {isSupplyMode ? "Supply" : "Borrow"} {asset.symbol}
       </Button>

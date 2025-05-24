@@ -8,10 +8,10 @@ export const Tokens = {
   wstETH: 2n,
 } as const
 
-export const useFakeBalance = (token: keyof typeof Tokens) => {
+export const useFakeBalance = (token: keyof typeof Tokens | bigint) => {
   const { address } = useAccount()
   return useReadTokenManagerBalanceOf({
-    args: [address!, Tokens[token]],
+    args: [address!, typeof token === 'string' ? Tokens[token] : token],
     query: {
       enabled: !!address,
     }
