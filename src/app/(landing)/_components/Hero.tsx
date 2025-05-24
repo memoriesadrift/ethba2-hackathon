@@ -9,13 +9,13 @@ export const Hero = () => {
         <div className="text-5xl md:text-6xl font-bold">
           <h1 className="inline">
             <span className="inline bg-gradient-to-r from-[#F596D3]  to-[#D247BF] text-transparent bg-clip-text">
-              Sandboxify
+              SandboxFi
             </span>{" "}
             — learn DeFi
           </h1>{" "}
           without{" "}
           <h2 className="inline">
-            loosing your{" "}
+            losing your{" "}
             <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] text-transparent bg-clip-text">
               money
             </span>
@@ -23,10 +23,9 @@ export const Hero = () => {
         </div>
 
         <p className="text-xl text-muted-foreground md:w-10/12 mx-auto lg:mx-0">
-          Easily learn how to use DeFi protocols like Uniswap, Aave, and ETH
-          staking with our platform. Experience hands-on practice in a risk-free
-          environment, just like demo trading, so you can explore and master
-          DeFi without worrying about losing real funds.
+          Experiment with DeFi apps like Uniswap, Aave or Lido without any risk.
+          Get hands-on practice in a risk-free environment, explore and master
+          DeFi and even earn rewards 🚀
         </p>
 
         <div className="space-y-4 md:space-y-0 md:space-x-4">
@@ -34,7 +33,7 @@ export const Hero = () => {
 
           <a
             rel="noreferrer noopener"
-            href="https://github.com/leoMirandaa/shadcn-landing-page.git"
+            href="https://github.com/memoriesadrift/ethba2-hackathon"
             target="_blank"
             className={`w-full md:w-1/3 ${buttonVariants({
               variant: "outline",
