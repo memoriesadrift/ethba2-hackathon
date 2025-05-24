@@ -18,7 +18,7 @@ contract GameManagerTest is Test {
     address public player = address(0x1);
 
     function setUp() public {
-        tokenManager = new TokenManager("");
+        tokenManager = new TokenManager();
         gameManager = new GameManager(address(tokenManager));
         tokenManager.createNewToken(address(token), "USD Coin", "USDC", 6);
         tokenManager.addMintAuthority(address(gameManager));

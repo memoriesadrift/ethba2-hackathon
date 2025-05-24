@@ -8,7 +8,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 contract TokenManager is Ownable {
-    constructor(string memory _uri) Ownable(msg.sender) {
+    constructor() Ownable(msg.sender) {
         nextFreeTokenId = 0;
     }
 
@@ -71,7 +71,7 @@ contract TokenManager is Ownable {
         _balances[id][from] -= value;
     }
 
-    function balanceOf(uint256 id, address person) public view returns (uint256) {
+    function balanceOf(address person, uint256 id) public view returns (uint256) {
         return _balances[id][person];
     }
 
@@ -95,7 +95,7 @@ contract TokenManager is Ownable {
         uint256 id,
         uint256 value,
         bytes memory data
-    ) public override {}
+    ) public {}
 
     /// @dev overridden to disable transferring, for a fair competition
     function safeBatchTransferFrom(
@@ -104,5 +104,5 @@ contract TokenManager is Ownable {
         uint256[] memory ids,
         uint256[] memory values,
         bytes memory data
-    ) public override {}
+    ) public {}
 }

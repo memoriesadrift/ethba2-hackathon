@@ -18,7 +18,7 @@ contract TokenManagerTest is Test {
 
     function setUp() public {
         vm.startPrank(admin);
-        tokenManager = new TokenManager("");
+        tokenManager = new TokenManager();
         vm.stopPrank();
     }
 
