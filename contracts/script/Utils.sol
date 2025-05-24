@@ -8,9 +8,28 @@ import "forge-std/StdJson.sol";
 // See https://book.getfoundry.sh/cheatcodes/parse-json#decoding-json-objects-into-solidity-structs
 
 // ======= Autonom mainnet contracts =======
+struct UniV2Pairs {
+    address ethDino;
+    address ethUsdc;
+    address virtualEth;
+}
+
 struct UniV2Deployment {
     address factory;
+    UniV2Pairs pairs;
     address v2Router02;
+}
+
+struct TokensDeployment {
+    address dino;
+    address eth;
+    address usdc;
+    address virtualProtocol;
+}
+
+struct CoreDeployment {
+    address gameManager;
+    address tokenManager;
 }
 
 contract IOUtils is Script {
@@ -25,5 +44,17 @@ contract IOUtils is Script {
         string memory raw = vm.readFile(string.concat(deploymentDir, "original/uniswapv2.json"));
         bytes memory rawBytes = vm.parseJson(raw);
         return abi.decode(rawBytes, (UniV2Deployment));
+    }
+
+    function readTokensDeployment() internal view returns (TokensDeployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "original/tokens.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (TokensDeployment));
+    }
+
+    function readCoreDeployment() internal view returns (CoreDeployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "core.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (CoreDeployment));
     }
 }

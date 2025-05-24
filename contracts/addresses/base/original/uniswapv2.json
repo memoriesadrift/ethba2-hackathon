@@ -1,4 +1,9 @@
 {
   "factory": "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
-  "v2Router02": "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24"
+  "v2Router02": "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24",
+  "pairs": {
+    "ethDino": "0x6a77CDeC82EFf6A6A5D273F18C1c27CD3d71A588",
+    "ethUsdc": "0x88A43bbDF9D098eEC7bCEda4e2494615dfD9bB9C",
+    "virtualEth": "0xE31c372a7Af875b3B5E0F3713B17ef51556da667"
+  }
 }
