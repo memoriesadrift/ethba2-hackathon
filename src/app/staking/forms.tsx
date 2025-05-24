@@ -13,135 +13,141 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Info } from "lucide-react";
+import { useBalance } from "wagmi";
+import { formatEther, parseEther } from "viem";
+import { useStake } from "@/lib/hooks/use-stake";
+import { useFakeEthBalance } from "@/lib/hooks/use-balance";
 
-interface StakeTabContentProps {
-  stakeAmount: string;
-  setStakeAmount: (value: string) => void;
-}
-
-const StakeTabContent: React.FC<StakeTabContentProps> = ({
-  stakeAmount,
-  setStakeAmount,
-}) => (
-  <TabsContent value="stake" className="space-y-6 pt-6">
-    <div className="space-y-4">
-      <div>
-        <Label
-          htmlFor="stake-amount"
-          className="text-sm font-medium text-slate-300"
-        >
-          Amount to stake
-        </Label>
-        <div className="relative mt-2">
-          <Input
-            id="stake-amount"
-            placeholder="0.0"
-            value={stakeAmount}
-            onChange={(e) => setStakeAmount(e.target.value)}
-            className="text-lg h-12 pr-16 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
-          />
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-            <span className="text-sm font-medium text-slate-400">ETH</span>
-          </div>
-        </div>
-        <div className="flex justify-between mt-2 text-sm text-slate-500">
-          <span>Balance: 2.45 ETH</span>
-          <button className="text-sky-400 hover:text-sky-300">Max</button>
-        </div>
-      </div>
-
-      <div className="bg-slate-800 rounded-lg p-4 space-y-2 border border-slate-700">
-        <div className="flex justify-between text-sm">
-          <span className="text-slate-400">You will receive</span>
-          <span className="font-medium text-slate-100">
-            {stakeAmount || "0.0"} stETH
-          </span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-slate-400">Exchange rate</span>
-          <span className="text-slate-100">1 ETH = 1 stETH</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-slate-400">Annual percentage rate</span>
-          <span className="text-green-400 font-medium">5.2%</span>
-        </div>
-      </div>
-
-      <Button
-        className="w-full h-12 text-lg bg-gradient-to-r from-sky-600 to-violet-600 hover:from-sky-700 hover:to-violet-700 text-white"
-        disabled={!stakeAmount}
-      >
-        Stake ETH
-        <ArrowRight className="w-4 h-4 ml-2" />
-      </Button>
-    </div>
-  </TabsContent>
-);
-
-interface UnstakeTabContentProps {
-  unstakeAmount: string;
-  setUnstakeAmount: (value: string) => void;
-}
-
-const UnstakeTabContent: React.FC<UnstakeTabContentProps> = ({
-  unstakeAmount,
-  setUnstakeAmount,
-}) => (
-  <TabsContent value="unstake" className="space-y-6 pt-6">
-    <div className="space-y-4">
-      <div>
-        <Label
-          htmlFor="unstake-amount"
-          className="text-sm font-medium text-slate-300"
-        >
-          Amount to unstake
-        </Label>
-        <div className="relative mt-2">
-          <Input
-            id="unstake-amount"
-            placeholder="0.0"
-            value={unstakeAmount}
-            onChange={(e) => setUnstakeAmount(e.target.value)}
-            className="text-lg h-12 pr-20 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
-          />
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-            <span className="text-sm font-medium text-slate-400">stETH</span>
-          </div>
-        </div>
-        <div className="flex justify-between mt-2 text-sm text-slate-500">
-          <span>Balance: 1.23 stETH</span>
-          <button className="text-sky-400 hover:text-sky-300">Max</button>
-        </div>
-      </div>
-
-      <div className="bg-amber-500/10 border border-amber-700/30 rounded-lg p-4">
-        <div className="flex items-start space-x-2">
-          <Info className="w-4 h-4 text-amber-400 mt-0.5" />
-          <div className="text-sm text-amber-300">
-            <p className="font-medium mb-1 text-amber-200">Unstaking Period</p>
-            <p>
-              Unstaking requests are processed within 1-5 days. You can also
-              swap stETH for ETH instantly on DEXs.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <Button
-        className="w-full h-12 text-lg border-slate-700 text-slate-100 hover:bg-slate-800 bg-slate-800/50"
-        variant="outline"
-        disabled={!unstakeAmount}
-      >
-        Request Unstake
-      </Button>
-    </div>
-  </TabsContent>
-);
-
-export const StakingInterface = () => {
+const StakeTabContent = () => {
+  const { data: balance } = useFakeEthBalance();
   const [stakeAmount, setStakeAmount] = useState("");
+  const { stake, isPending } = useStake();
+
+  return (
+    <TabsContent value="stake" className="space-y-6 pt-6">
+      <div className="space-y-4">
+        <div>
+          <Label
+            htmlFor="stake-amount"
+            className="text-sm font-medium text-slate-300"
+          >
+            Amount to stake
+          </Label>
+          <div className="relative mt-2">
+            <Input
+              id="stake-amount"
+              placeholder="0.0"
+              value={stakeAmount}
+              onChange={(e) => setStakeAmount(e.target.value)}
+              className="text-lg h-12 pr-16 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
+            />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+              <span className="text-sm font-medium text-slate-400">ETH</span>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-sm text-slate-500">
+            <span>Balance: {balance && formatEther(balance)} ETH</span>
+            <button
+              className="text-sky-400 hover:text-sky-300"
+              type="button"
+              onClick={() => setStakeAmount(formatEther(balance))}
+            >
+              Max
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-slate-800 rounded-lg p-4 space-y-2 border border-slate-700">
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-400">You will receive</span>
+            <span className="font-medium text-slate-100">
+              {stakeAmount || "0.0"} stETH
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-400">Exchange rate</span>
+            <span className="text-slate-100">1 ETH = 1 stETH</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-400">Annual percentage rate</span>
+            <span className="text-green-400 font-medium">5.2%</span>
+          </div>
+        </div>
+
+        <Button
+          className="w-full h-12 text-lg bg-gradient-to-r from-sky-600 to-violet-600 hover:from-sky-700 hover:to-violet-700 text-white"
+          disabled={!stakeAmount || isPending}
+          onClick={() => {
+            stake({ amount: parseEther(stakeAmount) });
+          }}
+        >
+          Stake ETH
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
+    </TabsContent>
+  );
+};
+
+const UnstakeTabContent = () => {
   const [unstakeAmount, setUnstakeAmount] = useState("");
 
+  return (
+    <TabsContent value="unstake" className="space-y-6 pt-6">
+      <div className="space-y-4">
+        <div>
+          <Label
+            htmlFor="unstake-amount"
+            className="text-sm font-medium text-slate-300"
+          >
+            Amount to unstake
+          </Label>
+          <div className="relative mt-2">
+            <Input
+              id="unstake-amount"
+              placeholder="0.0"
+              value={unstakeAmount}
+              onChange={(e) => setUnstakeAmount(e.target.value)}
+              className="text-lg h-12 pr-20 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
+            />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+              <span className="text-sm font-medium text-slate-400">stETH</span>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-sm text-slate-500">
+            <span>Balance: 1.23 stETH</span>
+            <button className="text-sky-400 hover:text-sky-300">Max</button>
+          </div>
+        </div>
+
+        <div className="bg-amber-500/10 border border-amber-700/30 rounded-lg p-4">
+          <div className="flex items-start space-x-2">
+            <Info className="w-4 h-4 text-amber-400 mt-0.5" />
+            <div className="text-sm text-amber-300">
+              <p className="font-medium mb-1 text-amber-200">
+                Unstaking Period
+              </p>
+              <p>
+                Unstaking requests are processed within 1-5 days. You can also
+                swap stETH for ETH instantly on DEXs.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <Button
+          className="w-full h-12 text-lg border-slate-700 text-slate-100 hover:bg-slate-800 bg-slate-800/50"
+          variant="outline"
+          disabled={!unstakeAmount}
+        >
+          Request Unstake
+        </Button>
+      </div>
+    </TabsContent>
+  );
+};
+
+export const StakingInterface = () => {
   return (
     <div className="max-w-lg mx-auto">
       <Card className="border-slate-700 shadow-2xl bg-slate-900/80 backdrop-blur-sm">
@@ -169,14 +175,8 @@ export const StakingInterface = () => {
                 Unstake
               </TabsTrigger>
             </TabsList>
-            <StakeTabContent
-              stakeAmount={stakeAmount}
-              setStakeAmount={setStakeAmount}
-            />
-            <UnstakeTabContent
-              unstakeAmount={unstakeAmount}
-              setUnstakeAmount={setUnstakeAmount}
-            />
+            <StakeTabContent />
+            <UnstakeTabContent />
           </Tabs>
         </CardContent>
       </Card>
