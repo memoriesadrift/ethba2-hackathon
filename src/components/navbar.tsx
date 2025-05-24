@@ -31,8 +31,8 @@ const routeList: RouteProps[] = [
     label: "Dashboard",
   },
   {
-    href: "#features",
-    label: "Features",
+    href: "/staking",
+    label: "Staking",
   },
   {
     href: "#faq",
@@ -45,12 +45,9 @@ export const Navbar = () => {
   return (
     <header className="sticky border-b-[1px] top-0 z-40 w-full flex border-b-slate-700 bg-background">
       <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container w-[calc(100vw_-_16px)] h-14 px-4 flex justify-between ">
+        <NavigationMenuList className="container w-[calc(100vw_-_16px)] h-14 px-4 flex justify-between md:grid md:grid-cols-[auto_1fr_200px] gap-2 justify-items-center">
           <NavigationMenuItem className="font-bold flex ">
-            <Link
-              href="/"
-              className="ml-2 font-bold text-xl flex items-center"
-            >
+            <Link href="/" className="ml-2 font-bold text-xl flex items-center">
               <LogoIcon className="size-10 mr-2 fill-white" />
               Sandboxify
             </Link>

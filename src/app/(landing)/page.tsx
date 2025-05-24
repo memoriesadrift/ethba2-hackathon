@@ -9,7 +9,7 @@ import { Team } from "./_components/Team";
 
 export default function Page() {
   return (
-    <>
+    <main className="w-full mx-auto px-8">
       <Hero />
       <Sponsors />
       <HowItWorks />
@@ -18,6 +18,6 @@ export default function Page() {
       <Team />
       <FAQ />
       <ScrollToTop />
-    </>
+    </main>
   );
 }
