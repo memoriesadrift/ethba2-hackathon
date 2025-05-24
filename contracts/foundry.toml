@@ -4,6 +4,9 @@ out = "out"
 libs = ["lib"]
 solc_version = "0.8.30"
 remappings = [
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/",
+    "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+    "@aave-v3/contracts/=lib/aave-v3-origin/src/contracts/",
     "@uniswap-v2/core=lib/v2-core/contracts/",
     "@uniswap-v2/periphery=lib/v2-periphery/contracts/",
 ]
