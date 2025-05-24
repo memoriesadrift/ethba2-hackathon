@@ -28,15 +28,15 @@ interface RouteProps {
 const routeList: RouteProps[] = [
   {
     href: "/dashboard",
-    label: "Dashboard",
+    label: "DEX",
   },
   {
     href: "/staking",
     label: "Staking",
   },
   {
-    href: "#faq",
-    label: "FAQ",
+    href: "/lending",
+    label: "Lending",
   },
 ];
 
