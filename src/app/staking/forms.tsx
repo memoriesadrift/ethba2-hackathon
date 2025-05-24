@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { formatEther, parseEther } from "viem";
 import { useStake } from "@/lib/hooks/use-stake";
 import { useFakeBalance } from "@/lib/hooks/use-balance";
@@ -22,6 +22,8 @@ const StakeTabContent = () => {
   const { data: balance } = useFakeBalance("ETH");
   const [stakeAmount, setStakeAmount] = useState("");
   const { stake, isPending } = useStake();
+  // TODO: fetch from contract
+  const wstEthExchangeRate = 1.205402;
 
   return (
     <TabsContent value="stake" className="space-y-6 pt-6">
@@ -42,11 +44,11 @@ const StakeTabContent = () => {
               className="text-lg h-12 pr-16 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-              <span className="text-sm font-medium text-slate-400">ETH</span>
+              <span className="text-sm font-medium text-slate-400">wETH</span>
             </div>
           </div>
           <div className="flex justify-between mt-2 text-sm text-slate-500">
-            <span>Balance: {balance && formatEther(balance)} ETH</span>
+            <span>Balance: {(balance && formatEther(balance)) || 0} wETH</span>
             <button
               className="text-sky-400 hover:text-sky-300"
               type="button"
@@ -61,12 +63,12 @@ const StakeTabContent = () => {
           <div className="flex justify-between text-sm">
             <span className="text-slate-400">You will receive</span>
             <span className="font-medium text-slate-100">
-              {stakeAmount || "0.0"} stETH
+              {stakeAmount * wstEthExchangeRate || "0.0"} wstETH
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-slate-400">Exchange rate</span>
-            <span className="text-slate-100">1 ETH = 1 stETH</span>
+            <span className="text-slate-100">1 ETH = {wstEthExchangeRate} wstETH</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-slate-400">Annual percentage rate</span>
@@ -113,11 +115,11 @@ const UnstakeTabContent = () => {
               className="text-lg h-12 pr-20 bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-sky-500"
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-              <span className="text-sm font-medium text-slate-400">stETH</span>
+              <span className="text-sm font-medium text-slate-400">wstETH</span>
             </div>
           </div>
           <div className="flex justify-between mt-2 text-sm text-slate-500">
-            <span>Balance: {balance} wstETH</span>
+            <span>Balance: {balance || 0} wstETH</span>
             <button
               className="text-sky-400 hover:text-sky-300"
               onClick={() => balance && unstake({ amount: balance })}
@@ -164,7 +166,7 @@ export const StakingInterface = () => {
             Stake ETH
           </CardTitle>
           <CardDescription className="text-center text-slate-400">
-            Stake your ETH to earn rewards and receive liquid stETH tokens
+            Stake your SandboxFi wETH to earn rewards and receive liquid wstETH tokens
           </CardDescription>
         </CardHeader>
         <CardContent>

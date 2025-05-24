@@ -13,7 +13,7 @@ const StakingHeader = () => (
         Liquid Ethereum Staking
       </h1>
       <p className="text-xl text-slate-400 leading-relaxed">
-        Stake your ETH and receive stETH while maintaining liquidity. Earn
+        Stake your SandboxFi wETH and receive wstETH that you can further trade. Earn
         staking rewards without locking up your assets.
       </p>
     </div>
@@ -25,7 +25,7 @@ const HowItWorksSection = () => (
     <div className="text-center mb-12">
       <h2 className="text-3xl font-bold mb-4 text-slate-100">How It Works</h2>
       <p className="text-slate-400 max-w-2xl mx-auto">
-        Simple steps to start earning rewards on your ETH
+        Lido offers liquid ETH staking on mainnet, which allows you to earn yield while not forfeiting use of your ETH. It's useful if you want to work further on the market, but earn yield when you aren't trading. SandboxFi allows you to test the waters with Lido for a safe yield as well as letting you experiment with other options!
       </p>
     </div>
 
