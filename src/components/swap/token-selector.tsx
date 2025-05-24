@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Check, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +30,7 @@ export function TokenSelector({
   otherToken,
 }: TokenSelectorProps) {
   const [open, setOpen] = useState(false);
-
+  console.log({ tokens });
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -42,15 +41,8 @@ export function TokenSelector({
           className="flex items-center gap-2 bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500 text-white"
         >
           <div className="flex items-center gap-2">
-            <div className="relative w-6 h-6 rounded-full overflow-hidden">
-              <Image
-                src={selectedToken.logoURI || "/placeholder.svg"}
-                alt={selectedToken.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <span>{selectedToken.symbol}</span>
+            <div className="relative w-6 h-6 rounded-full overflow-hidden"></div>
+            <span>{selectedToken.name}</span>
           </div>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </Button>
@@ -65,30 +57,23 @@ export function TokenSelector({
             <CommandEmpty>No token found.</CommandEmpty>
             <CommandGroup>
               {tokens
-                .filter((token) => token.id !== otherToken.id)
+                .filter((token) => token.address !== otherToken.address)
                 .map((token) => (
                   <CommandItem
-                    key={token.id}
-                    value={token.symbol}
+                    key={token.address}
+                    value={token.name}
                     onSelect={() => {
                       onSelectToken(token);
                       setOpen(false);
                     }}
                     className="flex items-center gap-2 hover:bg-gray-700"
                   >
-                    <div className="relative w-6 h-6 rounded-full overflow-hidden">
-                      <Image
-                        src={token.logoURI || "/placeholder.svg"}
-                        alt={token.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <span>{token.symbol}</span>
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden"></div>
+                    <span>{token.name}</span>
                     <span className="text-gray-400 text-xs ml-1">
                       {token.name}
                     </span>
-                    {selectedToken.id === token.id && (
+                    {selectedToken.address === token.address && (
                       <Check className="h-4 w-4 ml-auto text-green-500" />
                     )}
                   </CommandItem>

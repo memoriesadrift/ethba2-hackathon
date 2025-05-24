@@ -27,6 +27,8 @@ export default function TokenSwap() {
   const [toAmount, setToAmount] = useState("");
   const [slippage, setSlippage] = useState(0.5);
 
+  console.log({ x: BigInt(Math.floor(Date.now() / 1000) + 60 * 20) });
+
   const { data } = useSimulateUniswapV2Router02Clone({
     functionName: "swapTokensForExactTokens",
     args: [
@@ -38,7 +40,7 @@ export default function TokenSwap() {
     ],
   });
 
-  const [fromAmount] = data?.result || [BigInt(0)];
+  const [fromAmount] = data?.result ?? [BigInt(0)];
 
   const { writeContract: swapUniswapV2Router02Clone } =
     useWriteUniswapV2Router02Clone();
