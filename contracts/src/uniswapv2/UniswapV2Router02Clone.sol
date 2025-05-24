@@ -62,6 +62,11 @@ contract UniswapV2Router02Clone {
             amounts[0] <= amountInMax,
             "UniswapV2Router: EXCESSIVE_INPUT_AMOUNT"
         );
+        tokenManager.burn(
+            msg.sender,
+            tokenManager.tokenAddressToId(path[0]),
+            amounts[0]
+        );
         _swap(amounts, path, to);
     }
 

@@ -39,10 +39,10 @@ contract GameManager is Ownable {
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
-        tokenManager.mint(msg.sender, testUSDCTokenId, 1e6);
-        tokenManager.mint(msg.sender, testETHTokenId, 1e6);
-        tokenManager.mint(msg.sender, testDinoTokenId, 1e6);
-        tokenManager.mint(msg.sender, testVirtualTokenId, 1e6);
+        tokenManager.mint(msg.sender, testUSDCTokenId, 1e15);
+        tokenManager.mint(msg.sender, testETHTokenId, 1e15);
+        tokenManager.mint(msg.sender, testDinoTokenId, 1e15);
+        tokenManager.mint(msg.sender, testVirtualTokenId, 1e15);
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
 
