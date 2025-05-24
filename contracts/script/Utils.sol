@@ -32,6 +32,11 @@ struct CoreDeployment {
     address tokenManager;
 }
 
+struct AaveDeployment {
+    address aaveV3Pool;
+    address aaveDataProvider;
+}
+
 contract IOUtils is Script {
     string deploymentDir;
 
@@ -56,5 +61,11 @@ contract IOUtils is Script {
         string memory raw = vm.readFile(string.concat(deploymentDir, "core.json"));
         bytes memory rawBytes = vm.parseJson(raw);
         return abi.decode(rawBytes, (CoreDeployment));
+    }
+
+    function readAaveDeployment() internal view returns (AaveDeployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "original/aave.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (AaveDeployment));
     }
 }
