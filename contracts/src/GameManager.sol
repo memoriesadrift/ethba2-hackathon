@@ -14,6 +14,7 @@ contract GameManager is Ownable {
     uint256 public testVirtualTokenId = 3;
 
     struct Player {
+        address playerAddress;
         bool isRegistered;
         uint256 registeredAt;
         uint256 leftAt;
@@ -21,6 +22,8 @@ contract GameManager is Ownable {
     }
 
     mapping(address => Player) public players;
+
+    Player[] public top5Players;
 
     event PlayerRegistered(address indexed player, uint256 registeredAt);
     event PlayerLeft(address indexed player, uint256 leftAt);
@@ -31,6 +34,7 @@ contract GameManager is Ownable {
 
     function enterCompetition() external {
         require(!players[msg.sender].isRegistered, "Already registered");
+        players[msg.sender].playerAddress = msg.sender;
         players[msg.sender].isRegistered = true;
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
@@ -47,5 +51,40 @@ contract GameManager is Ownable {
         players[msg.sender].isRegistered = false;
         players[msg.sender].leftAt = block.timestamp;
         emit PlayerLeft(msg.sender, players[msg.sender].leftAt);
+    }
+
+    function submitScore() external {
+        require(players[msg.sender].isRegistered, "Not registered");
+        players[msg.sender].score = tokenManager.consolidate(msg.sender);
+        updateTop5Players(msg.sender);
+        tokenManager.removeUserHoldings(msg.sender);
+        players[msg.sender].isRegistered = false;
+        players[msg.sender].leftAt = block.timestamp;
+        emit PlayerLeft(msg.sender, players[msg.sender].leftAt);
+    }
+
+    function updateTop5Players(address player) internal {
+        // update top 5 players based on their scores
+        Player[] memory newTop5Players = new Player[](5);
+        Player storage current = players[player];
+        uint256 index = 0;
+
+        while (index < 5 && index < top5Players.length) {
+            if (current.score > top5Players[index].score) {
+                newTop5Players[index] = current;
+                current = top5Players[index];
+            } else {
+                newTop5Players[index] = top5Players[index];
+            }
+            index++;
+        }
+        if (index < 5) {
+            newTop5Players[index] = current;
+        }
+        top5Players = newTop5Players;
+    }
+
+    function getTop5Players() external view returns (Player[] memory) {
+        return top5Players;
     }
 }
