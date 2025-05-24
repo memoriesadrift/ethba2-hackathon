@@ -146,7 +146,7 @@ const UnstakeTabContent = () => {
           className="w-full h-12 text-lg border-slate-700 text-slate-100 hover:bg-slate-800 bg-slate-800/50"
           variant="outline"
           disabled={!unstakeAmount || isPending}
-          onAbort={() => unstake({ amount: parseEther(unstakeAmount) })}
+          onClick={() => unstake({ amount: parseEther(unstakeAmount) })}
         >
           Unstake
         </Button>
