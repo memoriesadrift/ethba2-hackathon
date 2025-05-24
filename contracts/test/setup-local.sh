@@ -17,5 +17,9 @@ forge script script/deploy/Core.s.sol:Deploy \
     --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
 forge script script/deploy/Uniswapv2.s.sol:Deploy \
     --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
+forge script script/deploy/Aave.s.sol:Deploy \
+    --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
+forge script script/deploy/Lido.s.sol:Deploy \
+   --rpc-url $RPC_URL --private-key $ANVIL1_PRIVKEY --broadcast
 
 wait $ANVIL_PID

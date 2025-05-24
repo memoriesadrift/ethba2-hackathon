@@ -14,7 +14,6 @@ contract TestERC20 is ERC20 {
 contract LidoCloneTest is Test {
     TokenManager public tokenManager;
     LidoClone public lidoClone;
-    address originalLido = address(0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84);
     TestERC20 tokenETH = new TestERC20("EthClone", "ETH");
     TestERC20 tokenWstETH = new TestERC20("WstETHClone", "wstETH");
     address public admin = makeAddr("admin");
