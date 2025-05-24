@@ -4,8 +4,10 @@ pragma solidity ^0.8.30;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {TokenManager} from "../TokenManager.sol";
 import {AaveProtocolDataProvider} from "@aave-v3/contracts/helpers/AaveProtocolDataProvider.sol";
+import {WadRayMath} from "@aave-v3/contracts/protocol/libraries/math/WadRayMath.sol";
 
 contract AaveV3PoolClone is Ownable {
+    using WadRayMath for uint256;
     TokenManager private tokenManager;
     AaveProtocolDataProvider private aaveDataProvider;
     address public original;
@@ -51,9 +53,9 @@ contract AaveV3PoolClone is Ownable {
         );
         (, , , , , , , , , uint256 currentIndex, , ) = aaveDataProvider
             .getReserveData(asset);
-        uint256 delta = currentIndex - indices[msg.sender];
 
-        uint256 owedRewards = amount + amount * delta;
+        uint256 growthRatio = currentIndex.rayDiv(indices[msg.sender]);
+        uint256 owedRewards = amount.rayMul(growthRatio);
 
         tokenManager.burn(msg.sender, aAssetId, amount);
         tokenManager.mint(msg.sender, aAssetIdToAssetId[aAssetId], owedRewards);
