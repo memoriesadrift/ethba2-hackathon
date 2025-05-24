@@ -27,6 +27,10 @@ interface RouteProps {
 
 const routeList: RouteProps[] = [
   {
+    href: "/leaderboard",
+    label: "Leaderboard",
+  },
+  {
     href: "/dashboard",
     label: "DEX",
   },
