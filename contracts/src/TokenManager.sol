@@ -87,7 +87,7 @@ contract TokenManager is Ownable {
     }
 
     // TODO: Use our uniswap clone to swap the tokens to USDC at market rate
-    // Used when a user submits their earnings to the competition
+    // The users need to manually swap their tokens to USDC before submitting
     function consolidate(address user) public returns (uint256) {
         return balanceOf(user, 0);
     }

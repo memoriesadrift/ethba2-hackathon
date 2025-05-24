@@ -96,91 +96,102 @@ contract GameManagerTest is Test {
     }
 
     function testSubmitScore() public {
-        vm.startPrank(player);
-        gameManager.enterCompetition();
-        vm.stopPrank();
         tokenManager.mint(player, gameManager.testUSDCTokenId(), 2e4);
+        tokenManager.mint(player2, gameManager.testUSDCTokenId(), 3e4);
+
         vm.startPrank(player);
+        gameManager.enterCompetition();
         gameManager.submitScore();
         vm.stopPrank();
+
         vm.startPrank(player2);
         gameManager.enterCompetition();
-        vm.stopPrank();
-        tokenManager.mint(player2, gameManager.testUSDCTokenId(), 3e4);
-        vm.startPrank(player2);
         gameManager.submitScore();
         vm.stopPrank();
-        assertEq(
-            gameManager.getTop5Players()[0].score,
-            1e6 + 3e4,
-            "Top player doesn't have the correct score"
+
+        (address playerAddress, , , , uint256 score) = gameManager.top5Players(
+            0
         );
+        assertEq(score, 1e6 + 3e4, "Top player doesn't have the correct score");
+        (playerAddress, , , , score) = gameManager.top5Players(1);
         assertEq(
-            gameManager.getTop5Players()[1].score,
+            score,
             1e6 + 2e4,
             "Second player doesn't have the correct score"
         );
-        assertEq(
-            gameManager.getTop5Players()[2].score,
-            0,
-            "Third player should not have a score"
-        );
-        vm.startPrank(player3);
-        gameManager.enterCompetition();
-        vm.stopPrank();
+        (playerAddress, , , , score) = gameManager.top5Players(2);
+        assertEq(score, 0, "Third player should not have a score");
+
         tokenManager.mint(player3, gameManager.testUSDCTokenId(), 6e4);
-        vm.startPrank(player3);
-        gameManager.submitScore();
-        vm.stopPrank();
-
-        vm.startPrank(player4);
-        gameManager.enterCompetition();
-        vm.stopPrank();
         tokenManager.mint(player4, gameManager.testUSDCTokenId(), 5e4);
-        vm.startPrank(player4);
-        gameManager.submitScore();
-        vm.stopPrank();
-
-        vm.startPrank(player5);
-        gameManager.enterCompetition();
-        vm.stopPrank();
-        tokenManager.mint(player, gameManager.testUSDCTokenId(), 1e4);
-        vm.startPrank(player5);
-        gameManager.submitScore();
-        vm.stopPrank();
-
-        vm.startPrank(player6);
-        gameManager.enterCompetition();
-        vm.stopPrank();
+        tokenManager.mint(player5, gameManager.testUSDCTokenId(), 1e4);
         tokenManager.mint(player6, gameManager.testUSDCTokenId(), 8e4);
-        vm.startPrank(player6);
+
+        vm.startPrank(player3);
+        gameManager.enterCompetition();
         gameManager.submitScore();
         vm.stopPrank();
 
-        console.log(
-            "Top 1 Player: %s, Score: %s",
-            gameManager.getTop5Players()[0].playerAddress,
-            gameManager.getTop5Players()[0].score
+        vm.startPrank(player4);
+        gameManager.enterCompetition();
+        gameManager.submitScore();
+        vm.stopPrank();
+
+        vm.startPrank(player5);
+        gameManager.enterCompetition();
+        gameManager.submitScore();
+        vm.stopPrank();
+
+        vm.startPrank(player6);
+        gameManager.enterCompetition();
+        gameManager.submitScore();
+        vm.stopPrank();
+
+        (playerAddress, , , , score) = gameManager.top5Players(0);
+        console.log("Top 1 Player: %s, Score: %s", playerAddress, score);
+
+        (playerAddress, , , , score) = gameManager.top5Players(1);
+        console.log("Top 2 Player: %s, Score: %s", playerAddress, score);
+
+        (playerAddress, , , , score) = gameManager.top5Players(2);
+        console.log("Top 3 Player: %s, Score: %s", playerAddress, score);
+
+        (playerAddress, , , , score) = gameManager.top5Players(3);
+        console.log("Top 4 Player: %s, Score: %s", playerAddress, score);
+
+        (playerAddress, , , , score) = gameManager.top5Players(4);
+        console.log("Top 5 Player: %s, Score: %s", playerAddress, score);
+    }
+
+    function testOpenAndCloseSubmission() public {
+        gameManager.openSubmission();
+        assertTrue(
+            gameManager.isSubmissionActive(),
+            "Submisison window should be active"
         );
-        console.log(
-            "Top 2 Player: %s, Score: %s",
-            gameManager.getTop5Players()[1].playerAddress,
-            gameManager.getTop5Players()[1].score
+        vm.startPrank(player);
+        gameManager.enterCompetition();
+        (, bool isRegistered, , , ) = gameManager.players(player);
+        assertTrue(
+            isRegistered,
+            "Player should be registered after entering competition"
         );
-        console.log(
-            "Top 3 Player: %s, Score: %s",
-            gameManager.getTop5Players()[2].playerAddress,
-            gameManager.getTop5Players()[2].score
+        gameManager.submitScore();
+        vm.stopPrank();
+
+        gameManager.closeSubmission();
+        assertFalse(
+            gameManager.isSubmissionActive(),
+            "Submission should not be active"
         );
-        console.log(
-            "Top 4 Player: %s, Score: %s",
-            gameManager.getTop5Players()[3].playerAddress,
-            gameManager.getTop5Players()[3].score
+        vm.startPrank(player2);
+        gameManager.enterCompetition();
+        (, bool isRegistered2, , , ) = gameManager.players(player2);
+        assertTrue(
+            isRegistered2,
+            "Player 2 should be registered after entering competition"
         );
-        console.log(
-            "Top 5 Player: %s, Score: %s",
-            gameManager.getTop5Players()[4].playerAddress,
-            gameManager.getTop5Players()[4].score
-        );
+        vm.expectRevert("Submission window is closed");
+        gameManager.submitScore();
     }
 }
