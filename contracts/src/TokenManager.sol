@@ -12,7 +12,8 @@ contract TokenManager is Ownable {
         nextFreeTokenId = 0;
     }
 
-    mapping(uint256 id => mapping(address account => uint256)) private _balances;
+    mapping(uint256 id => mapping(address account => uint256))
+        private _balances;
 
     uint256 private nextFreeTokenId;
     mapping(uint256 => string) public tokenNames;
@@ -41,7 +42,12 @@ contract TokenManager is Ownable {
     /**
      * @notice Creates a new mocked token based on a real token address
      */
-    function createNewToken(address token, string memory name, string memory symbol, uint8 decimals) public onlyOwner returns (uint256) {
+    function createNewToken(
+        address token,
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) public onlyOwner returns (uint256) {
         uint256 tokenId = nextFreeTokenId;
 
         // Save token metadata
@@ -50,7 +56,7 @@ contract TokenManager is Ownable {
         tokenSymbols[tokenId] = symbol;
         tokenDecimals[tokenId] = decimals;
 
-        nextFreeTokenId++; 
+        nextFreeTokenId++;
 
         return tokenId;
     }
@@ -71,7 +77,10 @@ contract TokenManager is Ownable {
         _balances[id][from] -= value;
     }
 
-    function balanceOf(address person, uint256 id) public view returns (uint256) {
+    function balanceOf(
+        address person,
+        uint256 id
+    ) public view returns (uint256) {
         return _balances[id][person];
     }
 
@@ -84,7 +93,7 @@ contract TokenManager is Ownable {
      */
     function removeUserHoldings(address user) public onlyMintAuthority {
         for (uint256 id = 0; id < nextFreeTokenId; id++) {
-            burn(user, id, balanceOf(id, user));
+            burn(user, id, balanceOf(user, id));
         }
     }
 

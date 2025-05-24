@@ -13,13 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Info } from "lucide-react";
-import { useBalance } from "wagmi";
 import { formatEther, parseEther } from "viem";
 import { useStake } from "@/lib/hooks/use-stake";
-import { useFakeEthBalance } from "@/lib/hooks/use-balance";
+import { useFakeBalance } from "@/lib/hooks/use-balance";
+import { useUnstake } from "@/lib/hooks/use-unstake";
 
 const StakeTabContent = () => {
-  const { data: balance } = useFakeEthBalance();
+  const { data: balance } = useFakeBalance("ETH");
   const [stakeAmount, setStakeAmount] = useState("");
   const { stake, isPending } = useStake();
 
@@ -50,7 +50,7 @@ const StakeTabContent = () => {
             <button
               className="text-sky-400 hover:text-sky-300"
               type="button"
-              onClick={() => setStakeAmount(formatEther(balance))}
+              onClick={() => balance && setStakeAmount(formatEther(balance))}
             >
               Max
             </button>
@@ -91,6 +91,8 @@ const StakeTabContent = () => {
 
 const UnstakeTabContent = () => {
   const [unstakeAmount, setUnstakeAmount] = useState("");
+  const { data: balance } = useFakeBalance("wstETH");
+  const { unstake, isPending } = useUnstake();
 
   return (
     <TabsContent value="unstake" className="space-y-6 pt-6">
@@ -115,12 +117,17 @@ const UnstakeTabContent = () => {
             </div>
           </div>
           <div className="flex justify-between mt-2 text-sm text-slate-500">
-            <span>Balance: 1.23 stETH</span>
-            <button className="text-sky-400 hover:text-sky-300">Max</button>
+            <span>Balance: {balance} wstETH</span>
+            <button
+              className="text-sky-400 hover:text-sky-300"
+              onClick={() => balance && unstake({ amount: balance })}
+            >
+              Max
+            </button>
           </div>
         </div>
 
-        <div className="bg-amber-500/10 border border-amber-700/30 rounded-lg p-4">
+        {/* <div className="bg-amber-500/10 border border-amber-700/30 rounded-lg p-4">
           <div className="flex items-start space-x-2">
             <Info className="w-4 h-4 text-amber-400 mt-0.5" />
             <div className="text-sm text-amber-300">
@@ -133,14 +140,15 @@ const UnstakeTabContent = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <Button
           className="w-full h-12 text-lg border-slate-700 text-slate-100 hover:bg-slate-800 bg-slate-800/50"
           variant="outline"
-          disabled={!unstakeAmount}
+          disabled={!unstakeAmount || isPending}
+          onAbort={() => unstake({ amount: parseEther(unstakeAmount) })}
         >
-          Request Unstake
+          Unstake
         </Button>
       </div>
     </TabsContent>

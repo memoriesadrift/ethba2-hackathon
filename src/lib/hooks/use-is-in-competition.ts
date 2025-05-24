@@ -1,14 +1,10 @@
-import { gameManagerAbi } from "@/abi/game-manager";
-import { gameManagerAddress } from "@/addresses";
 import { Address } from "viem";
-import { useAccount, useReadContract } from "wagmi";
+import { useReadGameManagerPlayers } from "@/abi";
+import { useAccount } from "wagmi";
 
 export const useIsInCompetition = () => {
   const { address: userAddress } = useAccount();
-  const { data, isLoading } = useReadContract({
-    address: gameManagerAddress,
-    abi: gameManagerAbi,
-    functionName: "players",
+  const { data, isLoading } = useReadGameManagerPlayers({
     args: [userAddress as Address],
     query: {
       enabled: !!userAddress,

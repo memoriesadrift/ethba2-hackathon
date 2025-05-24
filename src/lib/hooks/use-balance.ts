@@ -1,14 +1,17 @@
-import { gameManagerAbi } from "@/abi/game-manager";
-import { gameManagerAddress } from "@/addresses";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useReadTokenManagerBalanceOf } from "@/abi";
 
-export const useFakeEthBalance = () => {
+import { useAccount } from "wagmi";
+
+export const Tokens = {
+  USCD: 0n,
+  ETH: 1n,
+  wstETH: 2n,
+} as const
+
+export const useFakeBalance = (token: keyof typeof Tokens) => {
   const { address } = useAccount()
-  return useReadContract({
-    address: gameManagerAddress,
-    abi: gameManagerAbi,
-    functionName: "balanceOf",
-    args: [address!],
+  return useReadTokenManagerBalanceOf({
+    args: [address!, Tokens[token]],
     query: {
       enabled: !!address,
     }
