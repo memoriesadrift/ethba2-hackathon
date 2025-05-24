@@ -22,6 +22,7 @@ contract TokenManager is Ownable {
 
     /// Maps the token id to the corresponding real token
     mapping(uint256 => address) public realTokenAddress;
+    mapping(address => uint256) public tokenAddressToId;
 
     /// Who is allowed to mint tokens
     mapping(address => bool) private _mintAuthority;
@@ -55,6 +56,7 @@ contract TokenManager is Ownable {
         tokenNames[tokenId] = name;
         tokenSymbols[tokenId] = symbol;
         tokenDecimals[tokenId] = decimals;
+        tokenAddressToId[token] = tokenId;
 
         nextFreeTokenId++;
 

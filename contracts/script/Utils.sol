@@ -53,7 +53,7 @@ contract IOUtils is Script {
     }
 
     function readCoreDeployment() internal view returns (CoreDeployment memory) {
-        string memory raw = vm.readFile(string.concat(deploymentDir, "original/core.json"));
+        string memory raw = vm.readFile(string.concat(deploymentDir, "core.json"));
         bytes memory rawBytes = vm.parseJson(raw);
         return abi.decode(rawBytes, (CoreDeployment));
     }

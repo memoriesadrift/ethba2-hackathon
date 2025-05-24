@@ -22,13 +22,11 @@ contract UniswapV2Router02Clone {
     }
 
     // SWAP
-    // requires the initial amount to have already been sent to the first pair
-    // TODO: we can't contact original pair
     function _swap(
         uint[] memory amounts,
         address[] memory path,
         address _to
-    ) internal virtual {
+    ) internal {
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
             (address token0, ) = UniswapV2Library.sortTokens(input, output);
@@ -39,8 +37,16 @@ contract UniswapV2Router02Clone {
             address to = i < path.length - 2
                 ? UniswapV2Library.pairFor(factory, output, path[i + 2])
                 : _to;
-            IUniswapV2Pair(UniswapV2Library.pairFor(factory, input, output))
-                .swap(amount0Out, amount1Out, to, new bytes(0));
+            tokenManager.mint(
+                to,
+                tokenManager.tokenAddressToId(output),
+                amount0Out
+            );
+            tokenManager.burn(
+                to,
+                tokenManager.tokenAddressToId(input),
+                amount1Out
+            );
         }
     }
 
@@ -56,14 +62,6 @@ contract UniswapV2Router02Clone {
             amounts[0] <= amountInMax,
             "UniswapV2Router: EXCESSIVE_INPUT_AMOUNT"
         );
-        // TODO: move path[0] to the pair
-        // below is original implementation
-        // TransferHelper.safeTransferFrom(
-        //     path[0],
-        //     msg.sender,
-        //     UniswapV2Library.pairFor(factory, path[0], path[1]),
-        //     amounts[0]
-        // );
         _swap(amounts, path, to);
     }
 
