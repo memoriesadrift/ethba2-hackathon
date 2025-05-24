@@ -1,4 +1,5 @@
 "use client";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -31,7 +32,10 @@ export const Providers = ({ children }: Props) => {
       }}
     >
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
+        <WagmiProvider config={wagmiConfig}>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </WagmiProvider>
       </QueryClientProvider>
     </PrivyProvider>
   );

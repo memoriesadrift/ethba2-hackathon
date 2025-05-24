@@ -1,6 +1,6 @@
-import { useReadTokenManagerBalanceOf } from "@/abi";
+import { tokenManagerAbi, tokenManagerConfig, useReadTokenManagerBalanceOf } from "@/abi";
 
-import { useAccount } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 
 export const Tokens = {
   USCD: 0n,
@@ -17,3 +17,17 @@ export const useFakeBalance = (token: keyof typeof Tokens | bigint) => {
     }
   });
 };
+
+export const useFakeBalances = (tokens: (keyof typeof Tokens | bigint)[]) => {
+  const { address } = useAccount()
+  return useReadContracts({
+    contracts: tokens.map(token => ({
+      ...tokenManagerConfig,
+      functionName: 'balanceOf',
+      args: [address!, typeof token === 'string' ? Tokens[token] : token],
+    } as const)),
+    query: {
+      enabled: !!address,
+    }
+  })
+}

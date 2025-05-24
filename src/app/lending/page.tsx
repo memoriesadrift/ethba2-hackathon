@@ -22,12 +22,12 @@ import {
   Shield,
   DollarSign,
 } from "lucide-react";
-import { useFakeBalance } from "@/lib/hooks/use-balance";
+import { useFakeBalance, useFakeBalances } from "@/lib/hooks/use-balance";
 import {
   useWriteAaveV3PoolCloneSupply,
   useWriteAaveV3PoolCloneWithdraw,
 } from "@/abi";
-import { parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 
 interface AssetType {
   symbol: string;
@@ -446,12 +446,15 @@ const assetsList = [
 ];
 
 const useGetAssetsData = (assets: Partial<AssetType>[]) => {
-  return assets.map((asset) => ({
+  const { data: balances } = useFakeBalances(assets.map((asset) => asset.id!));
+  return assets.map((asset, index) => ({
     ...asset,
     supplyAPY: 2.45,
     totalSupplied: "12.5M",
     liquidity: "4.3M",
-    walletBalance: "2.5",
+    walletBalance:
+      (balances?.[index].result && formatEther(balances?.[index].result)) ||
+      "0.00",
     supplied: "0",
   })) as AssetType[];
 };
