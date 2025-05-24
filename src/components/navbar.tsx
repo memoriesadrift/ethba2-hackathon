@@ -38,6 +38,14 @@ const routeList: RouteProps[] = [
     href: "/lending",
     label: "Lending",
   },
+  {
+    href: "/landing",
+    label: "Landing",
+  },
+  {
+    href: "/leaderboard",
+    label: "Leaderboard",
+  },
 ];
 
 export const Navbar = () => {

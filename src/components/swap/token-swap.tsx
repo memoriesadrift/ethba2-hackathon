@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDown, Cog } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -49,9 +49,6 @@ export default function TokenSwap() {
     <Card className="w-full max-w-md">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <h2 className="text-xl font-bold">Swap</h2>
-        <Button variant="ghost" size="icon">
-          <Cog className="h-5 w-5" />
-        </Button>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="rounded-xl">
@@ -131,7 +128,7 @@ export default function TokenSwap() {
       </CardContent>
       <CardFooter>
         <Button
-          className="w-full text-white font-semibold h-12 rounded-xl"
+          className="w-full text-black font-semibold h-12 rounded-xl"
           disabled={!fromAmount || Number.parseFloat(fromAmount) <= 0}
         >
           Swap
