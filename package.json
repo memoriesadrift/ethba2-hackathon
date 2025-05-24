@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^12.8.0",
+    "@ledgerhq/crypto-icons": "^1.1.0",
     "@privy-io/react-auth": "~2.8.3",
     "@privy-io/wagmi": "^1.0.3",
     "@radix-ui/react-accordion": "^1.2.11",
@@ -22,6 +23,7 @@
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-navigation-menu": "^1.2.13",
     "@radix-ui/react-popover": "^1.1.14",
+    "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.5",
     "@radix-ui/react-tabs": "^1.1.12",
