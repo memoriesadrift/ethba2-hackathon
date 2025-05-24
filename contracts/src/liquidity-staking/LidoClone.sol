@@ -2,30 +2,16 @@
 pragma solidity ^0.8.26;
 
 import {TokenManager} from "../TokenManager.sol";
+import {console} from "forge-std/Test.sol";
 
-interface IWstETH {
-    function getStETHByWstETH(
-        uint256 wstETHAmount
-    ) external view returns (uint256);
-
-    function getWstETHByStETH(
-        uint256 stETHAmount
-    ) external view returns (uint256);
-}
-
-contract WrappedStETHClone {
-    IWstETH original;
+contract LidoClone {
+    uint256 public constant PRECISION = 1e18;
+    uint256 public constant ETH_PER_WSTETH = 1.205402e18;
     TokenManager public tokenManager;
-    uint256 ethId;
-    uint256 wstETHId;
+    uint256 public ethId;
+    uint256 public wstETHId;
 
-    constructor(
-        address _tokenManager,
-        address _original,
-        uint256 _ETHId,
-        uint256 _wstETHId
-    ) {
-        original = IWstETH(_original);
+    constructor(address _tokenManager, uint256 _ETHId, uint256 _wstETHId) {
         tokenManager = TokenManager(_tokenManager);
         ethId = _ETHId;
         wstETHId = _wstETHId;
@@ -36,7 +22,9 @@ contract WrappedStETHClone {
             tokenManager.balanceOf(msg.sender, ethId) >= amountToSwap,
             "Not enough ETH"
         );
-        uint256 amountToMint = original.getWstETHByStETH(amountToSwap);
+        console.log("Swapping %s ETH for wstETH", amountToSwap);
+        uint256 amountToMint = (amountToSwap * PRECISION) / ETH_PER_WSTETH;
+        console.log("Minting %s wstETH", amountToMint);
         tokenManager.burn(msg.sender, ethId, amountToSwap);
         tokenManager.mint(msg.sender, wstETHId, amountToMint);
     }
@@ -46,7 +34,7 @@ contract WrappedStETHClone {
             tokenManager.balanceOf(msg.sender, wstETHId) >= amountToSwap,
             "Not enough wstETH"
         );
-        uint256 amountToMint = original.getStETHByWstETH(amountToSwap);
+        uint256 amountToMint = (amountToSwap * ETH_PER_WSTETH) / PRECISION;
         tokenManager.burn(msg.sender, wstETHId, amountToSwap);
         tokenManager.mint(msg.sender, ethId, amountToMint);
     }

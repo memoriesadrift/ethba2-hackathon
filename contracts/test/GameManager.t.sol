@@ -33,12 +33,21 @@ contract GameManagerTest is Test {
             ,
             uint256 score
         ) = gameManager.players(player);
-        assertTrue(isRegistered);
-        assertEq(registeredAt, block.timestamp);
-        assertEq(score, 0);
+        assertTrue(isRegistered, "Player should be registered after entering");
+        assertEq(
+            registeredAt,
+            block.timestamp,
+            "Player should be registered at the current block timestamp"
+        );
+        assertEq(
+            score,
+            0,
+            "Player's score should be 0 after entering competition"
+        );
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
-            1e6
+            1e6,
+            "Plater should have initial tokens after entering competition"
         );
         vm.stopPrank();
     }
@@ -52,22 +61,30 @@ contract GameManagerTest is Test {
             uint256 leftAt,
             uint256 score
         ) = gameManager.players(player);
-        assertTrue(isRegistered);
+        assertTrue(isRegistered, "Player should be registered after entering");
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
-            1e6
+            1e6,
+            "Player should have initial tokens after entering competition"
         );
         gameManager.leaveCompetition();
         (isRegistered, registeredAt, leftAt, score) = gameManager.players(
             player
         );
-        assertFalse(isRegistered);
+        assertFalse(
+            isRegistered,
+            "Player should not be registered after leaving"
+        );
         assertEq(
             tokenManager.balanceOf(player, gameManager.testUSDCTokenId()),
             0,
             "Player should have 0 tokens after leaving the competition"
         );
-        assertEq(leftAt, block.timestamp);
+        assertEq(
+            leftAt,
+            block.timestamp,
+            "Player should have left at the current block timestamp"
+        );
         vm.stopPrank();
     }
 }
