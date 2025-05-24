@@ -8,8 +8,15 @@ import "forge-std/StdJson.sol";
 // See https://book.getfoundry.sh/cheatcodes/parse-json#decoding-json-objects-into-solidity-structs
 
 // ======= Autonom mainnet contracts =======
+struct UniV2Pairs {
+    address ethDino;
+    address ethUsdc;
+    address virtualEth;
+}
+
 struct UniV2Deployment {
     address factory;
+    UniV2Pairs pairs;
     address v2Router02;
 }
 

@@ -24,3 +24,6 @@ TOKEN_MANAGER=$(jq -r ".tokenManager" contracts/addresses/base/core.json)
 cast call $GAME_MANAGER "tokenManager()(address)"
 
 cast send $GAME_MANAGER "enterCompetition()()" --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+ETH_USDC=$(jq -r ".pairs.ethUsdc" contracts/addresses/base/original/uniswapv2.json)
+cast call $ETH_USDC "token0()(address)"
