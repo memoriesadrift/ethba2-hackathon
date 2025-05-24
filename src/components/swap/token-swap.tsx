@@ -12,37 +12,71 @@ import {
 import { Input } from "@/components/ui/input";
 import { TokenSelector } from "./token-selector";
 import { tokens } from "@/mocks/tokens";
+import {
+  useSimulateUniswapV2Router02Clone,
+  useWriteUniswapV2Router02Clone,
+} from "@/abi";
+import { useAccount, useSimulateContract } from "wagmi";
+import { Address } from "viem";
 
 export default function TokenSwap() {
+  const { address: userAddress } = useAccount();
   const [fromToken, setFromToken] = useState(tokens[0]);
   const [toToken, setToToken] = useState(tokens[1]);
-  const [fromAmount, setFromAmount] = useState("");
+  // const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
   const [slippage, setSlippage] = useState(0.5);
 
-  // Simulate price calculation
-  const calculateToAmount = (amount: string) => {
-    if (!amount || isNaN(Number.parseFloat(amount))) return "";
-    // Mock exchange rate - in a real app this would come from an API or blockchain
-    const rate = fromToken.price / toToken.price;
-    return (Number.parseFloat(amount) * rate).toFixed(6);
-  };
+  const { data } = useSimulateUniswapV2Router02Clone({
+    functionName: "swapTokensForExactTokens",
+    args: [
+      BigInt(toAmount || "0"),
+      BigInt(100000000000000000),
+      [fromToken.address, toToken.address],
+      userAddress as Address,
+      BigInt(Math.floor(Date.now() / 1000) + 60 * 20), // deadline 20 minutes from now
+    ],
+  });
 
-  const handleFromAmountChange = (value: string) => {
-    setFromAmount(value);
-    setToAmount(calculateToAmount(value));
-  };
+  const [fromAmount] = data?.result || [BigInt(0)];
+
+  const { writeContract: swapUniswapV2Router02Clone } =
+    useWriteUniswapV2Router02Clone();
+
+  // Simulate price calculation
+  // const calculateToAmount = (amount: string) => {
+  //   if (!amount || isNaN(Number.parseFloat(amount))) return "";
+  //   // Mock exchange rate - in a real app this would come from an API or blockchain
+  //   const rate = fromToken.price / toToken.price;
+  //   return (Number.parseFloat(amount) * rate).toFixed(6);
+  // };
+
+  // const handleFromAmountChange = (value: string) => {
+  //   setFromAmount(value);
+  //   setToAmount(calculateToAmount(value));
+  // };
 
   const handleSwapTokens = () => {
-    const temp = fromToken;
-    setFromToken(toToken);
-    setToToken(temp);
+    // const temp = fromToken;
+    // setFromToken(toToken);
+    // setToToken(temp);
 
-    // Recalculate amounts
-    if (fromAmount) {
-      const newToAmount = calculateToAmount(fromAmount);
-      setToAmount(newToAmount);
-    }
+    // // Recalculate amounts
+    // if (fromAmount) {
+    //   const newToAmount = calculateToAmount(fromAmount);
+    //   setToAmount(newToAmount);
+    // }
+
+    swapUniswapV2Router02Clone({
+      functionName: "swapTokensForExactTokens",
+      args: [
+        BigInt(toAmount || "0"),
+        BigInt(100000000000000000),
+        [fromToken.address, toToken.address],
+        userAddress as Address,
+        BigInt(Math.floor(Date.now() / 1000) + 60 * 20), // deadline 20 minutes from now
+      ],
+    });
   };
 
   return (
@@ -54,16 +88,13 @@ export default function TokenSwap() {
         <div className="rounded-xl">
           <div className="flex justify-between mb-2">
             <span className="text-sm">From</span>
-            <span className="text-sm ">
-              Balance: {fromToken.balance.toFixed(4)}
-            </span>
           </div>
           <div className="flex items-center gap-2 w-full">
             <Input
               type="text"
+              readOnly
               placeholder="0.0"
-              value={fromAmount}
-              onChange={(e) => handleFromAmountChange(e.target.value)}
+              value={String(fromAmount)}
               className="border-none bg-transparent text-2xl font-medium placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
             />
             <TokenSelector
@@ -90,16 +121,13 @@ export default function TokenSwap() {
         <div className="rounded-xl">
           <div className="flex justify-between mb-2">
             <span className="text-sm ">To</span>
-            <span className="text-sm text-gray-400">
-              Balance: {toToken.balance.toFixed(4)}
-            </span>
           </div>
           <div className="flex items-center gap-2 w-full">
             <Input
               type="text"
               placeholder="0.0"
               value={toAmount}
-              readOnly
+              onChange={(e) => setToAmount(e.target.value)}
               className="border-none bg-transparent text-2xl font-medium placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 p-0"
             />
             <TokenSelector
@@ -109,27 +137,12 @@ export default function TokenSwap() {
             />
           </div>
         </div>
-
-        {fromAmount && toAmount && (
-          <div className="rounded-lg p-3 text-sm">
-            <div className="flex justify-between">
-              <span>Price</span>
-              <span>
-                1 {fromToken.symbol} ={" "}
-                {(fromToken.price / toToken.price).toFixed(6)} {toToken.symbol}
-              </span>
-            </div>
-            <div className="flex justify-between mt-1">
-              <span>Slippage Tolerance</span>
-              <span>{slippage}%</span>
-            </div>
-          </div>
-        )}
       </CardContent>
       <CardFooter>
         <Button
           className="w-full text-black font-semibold h-12 rounded-xl"
-          disabled={!fromAmount || Number.parseFloat(fromAmount) <= 0}
+          disabled={!toAmount || Number.parseFloat(toAmount) <= 0}
+          onClick={handleSwapTokens}
         >
           Swap
         </Button>
