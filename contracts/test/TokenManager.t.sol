@@ -18,7 +18,7 @@ contract TokenManagerTest is Test {
 
     function setUp() public {
         vm.startPrank(admin);
-        tokenManager = new TokenManager("");
+        tokenManager = new TokenManager();
         vm.stopPrank();
     }
 
@@ -31,14 +31,14 @@ contract TokenManagerTest is Test {
 
     function test_createNewToken() public {
         vm.startPrank(admin);
-        tokenManager.createNewToken(address(token));
+        tokenManager.createNewToken(address(token), "USD Coin", "USDC", 6);
         vm.stopPrank();
     }
 
     function test_mintAuthority() public {
         vm.startPrank(admin);
         tokenManager.addMintAuthority(authorisedContract);
-        tokenManager.createNewToken(address(token));
+        tokenManager.createNewToken(address(token), "USD Coin", "USDC", 6);
         vm.startPrank(authorisedContract);
         tokenManager.mint(user, 0, 10);
         assertEq(tokenManager.balanceOf(user, 0), 10);

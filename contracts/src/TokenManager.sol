@@ -7,10 +7,12 @@ import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
-contract TokenManager is ERC1155, Ownable {
-    constructor(string memory _uri) ERC1155(_uri) Ownable(msg.sender) {
+contract TokenManager is Ownable {
+    constructor() Ownable(msg.sender) {
         nextFreeTokenId = 0;
     }
+
+    mapping(uint256 id => mapping(address account => uint256)) private _balances;
 
     uint256 private nextFreeTokenId;
     mapping(uint256 => string) public tokenNames;
@@ -39,14 +41,14 @@ contract TokenManager is ERC1155, Ownable {
     /**
      * @notice Creates a new mocked token based on a real token address
      */
-    function createNewToken(address token) public onlyOwner returns (uint256) {
+    function createNewToken(address token, string memory name, string memory symbol, uint8 decimals) public onlyOwner returns (uint256) {
         uint256 tokenId = nextFreeTokenId;
 
         // Save token metadata
         realTokenAddress[tokenId] = token;
-        tokenNames[tokenId] = IERC20Metadata(token).name();
-        tokenSymbols[tokenId] = IERC20Metadata(token).symbol();
-        tokenDecimals[tokenId] = IERC20Metadata(token).decimals();
+        tokenNames[tokenId] = name;
+        tokenSymbols[tokenId] = symbol;
+        tokenDecimals[tokenId] = decimals;
 
         nextFreeTokenId++;
 
@@ -58,7 +60,7 @@ contract TokenManager is ERC1155, Ownable {
         uint256 id,
         uint256 value
     ) public onlyMintAuthority {
-        _mint(to, id, value, bytes("0"));
+        _balances[id][to] += value;
     }
 
     function burn(
@@ -66,7 +68,11 @@ contract TokenManager is ERC1155, Ownable {
         uint256 id,
         uint256 value
     ) public onlyMintAuthority {
-        _burn(from, id, value);
+        _balances[id][from] -= value;
+    }
+
+    function balanceOf(address person, uint256 id) public view returns (uint256) {
+        return _balances[id][person];
     }
 
     // TODO: Use our uniswap clone to swap the tokens to USDC at market rate
@@ -89,7 +95,7 @@ contract TokenManager is ERC1155, Ownable {
         uint256 id,
         uint256 value,
         bytes memory data
-    ) public override {}
+    ) public {}
 
     /// @dev overridden to disable transferring, for a fair competition
     function safeBatchTransferFrom(
@@ -98,5 +104,5 @@ contract TokenManager is ERC1155, Ownable {
         uint256[] memory ids,
         uint256[] memory values,
         bytes memory data
-    ) public override {}
+    ) public {}
 }
