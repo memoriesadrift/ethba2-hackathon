@@ -27,6 +27,11 @@ struct TokensDeployment {
     address virtualProtocol;
 }
 
+struct CoreDeployment {
+    address gameManager;
+    address tokenManager;
+}
+
 contract IOUtils is Script {
     string deploymentDir;
 
@@ -45,5 +50,11 @@ contract IOUtils is Script {
         string memory raw = vm.readFile(string.concat(deploymentDir, "original/tokens.json"));
         bytes memory rawBytes = vm.parseJson(raw);
         return abi.decode(rawBytes, (TokensDeployment));
+    }
+
+    function readCoreDeployment() internal view returns (CoreDeployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "original/core.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (CoreDeployment));
     }
 }
