@@ -13,16 +13,24 @@ interface FAQProps {
 
 const FAQList: FAQProps[] = [
   {
-    question: "Is this template free?",
-    answer: "Yes. It is a free ChadcnUI template.",
+    question: "Is SandboxFi free?",
+    answer: "Yes. You only pay for transaction fees for interacting with our protocol.",
     value: "item-1",
   },
   {
-    question:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur natus?",
-    answer:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.",
-    value: "item-5",
+    question: "How do SandboxFi tokens work?",
+    answer: "SandboxFi are non-transferrable ERC-1155 tokens mirroring real ERC-20 assets. SandboxFi represents real ERC-20 assets like USDC in our ERC-1155 contract. They have no real world value and essentially act as testnet tokens, but with a twist. When interacting with real protocols through SandboxFi, SandboxFi communicates with DeFi protocols as if you were using real tokens. SandboxFi's unique mechanism then lets you earn yield as if you were using real assets.",
+    value: "item-2",
+  },
+  {
+    question: "How do I get started?",
+    answer: "Go to our app dashboard and get your free SandboxFi USDC tokens and start interacting with DeFi protocols, all without leaving our website!",
+    value: "item-3",
+  },
+  {
+    question: "How do competitions work?",
+    answer: "Competitions are time-locked events where users can enter to compete in who earns the most in a given time frame. At the end of the competition there will be a time window for users to submit their portfolio value and the top 5 highest earners share in the prize pool.",
+    value: "item-4",
   },
 ];
 
