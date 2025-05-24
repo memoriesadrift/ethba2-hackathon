@@ -22,9 +22,19 @@ contract LidoCloneTest is Test {
 
     function setUp() public {
         vm.startPrank(admin);
-        tokenManager = new TokenManager("");
-        uint256 ethId = tokenManager.createNewToken(address(tokenETH));
-        uint256 wstETHId = tokenManager.createNewToken(address(tokenWstETH));
+        tokenManager = new TokenManager();
+        uint256 ethId = tokenManager.createNewToken(
+            address(tokenETH),
+            "ETHClone",
+            "ETH",
+            18
+        );
+        uint256 wstETHId = tokenManager.createNewToken(
+            address(tokenWstETH),
+            "WstETHClone",
+            "wstETH",
+            18
+        );
         lidoClone = new LidoClone(address(tokenManager), ethId, wstETHId);
         tokenManager.addMintAuthority(address(lidoClone));
         tokenManager.addMintAuthority(admin);

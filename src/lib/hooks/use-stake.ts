@@ -1,18 +1,13 @@
-import { gameManagerAbi } from "@/abi/game-manager";
-import { gameManagerAddress } from "@/addresses";
-import { useWriteContract } from "wagmi";
+import { useWriteLidoCloneSwapEthForWstEth } from "@/abi";
 
 export const useStake = () => {
-  const { writeContractAsync, ...props } = useWriteContract();
+  const { writeContract, ...props } = useWriteLidoCloneSwapEthForWstEth();
 
   return {
     ...props,
     stake: async ({ amount }: { amount: bigint }) =>
-      writeContractAsync({
-        address: gameManagerAddress,
-        abi: gameManagerAbi,
-        functionName: "enterCompetition",
-        args: [],
+      writeContract({
+        args: [amount],
       }),
   }
 };

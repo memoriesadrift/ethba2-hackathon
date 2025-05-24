@@ -48,3 +48,6 @@ soljson-latest.js
 # Contract builds
 contracts/cache/
 contracts/out/
+
+# Auto-generated files
+src/abi
