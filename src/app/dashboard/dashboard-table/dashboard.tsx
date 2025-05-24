@@ -4,6 +4,10 @@ import { DataTable } from "@/components/table/data-table";
 import { useDashboardTableColumns } from "./dashboard-table-columns";
 import { Card, CardContent } from "@/components/ui/card";
 import TokenSwap from "@/components/swap/token-swap";
+import { Button } from "@/components/ui/button";
+import { useEnterCompetition } from "@/lib/hooks/use-enter-competition";
+import { useLeaveCompetition } from "@/lib/hooks/use-leave-competition";
+import { CompetitionButton } from "@/components/competition-button";
 
 export type DataTableRow = {
   id: string;
@@ -47,6 +51,9 @@ export const Dashboard = () => {
         </CardContent>
       </Card>
       <TokenSwap />
+      <div className="flex gap-2">
+        <CompetitionButton />
+      </div>
     </>
   );
 };
