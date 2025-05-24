@@ -9,7 +9,7 @@ export DEPLOYMENT=base
 pkill anvil || true
 
 # rpc urls: https://chainlist.org/chain/8453
-anvil --chain-id 8453 --fork-url "https://mainnet.base.org" &
+anvil --chain-id 9999 --fork-url "https://mainnet.base.org" &
 ANVIL_PID=$!
 
 sleep 5

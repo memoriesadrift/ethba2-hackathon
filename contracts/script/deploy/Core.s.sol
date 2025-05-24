@@ -6,6 +6,12 @@ import {GameManager} from "src/GameManager.sol";
 import {TokenManager} from "src/TokenManager.sol";
 import {IOUtils, UniV2Deployment} from "script/Utils.sol";
 
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract TestERC20 is ERC20 {
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
+}
+
 contract Deploy is Script, IOUtils {
     function run() public {
         vm.startBroadcast();

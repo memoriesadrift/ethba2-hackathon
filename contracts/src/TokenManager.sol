@@ -50,7 +50,7 @@ contract TokenManager is Ownable {
         tokenSymbols[tokenId] = symbol;
         tokenDecimals[tokenId] = decimals;
 
-        nextFreeTokenId++;
+        nextFreeTokenId++; 
 
         return tokenId;
     }
@@ -84,7 +84,7 @@ contract TokenManager is Ownable {
      */
     function removeUserHoldings(address user) public onlyMintAuthority {
         for (uint256 id = 0; id < nextFreeTokenId; id++) {
-            burn(user, id, balanceOf(user, id));
+            burn(user, id, balanceOf(id, user));
         }
     }
 
