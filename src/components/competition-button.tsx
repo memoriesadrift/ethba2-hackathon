@@ -11,16 +11,16 @@ export const CompetitionButton = () => {
   const { handleEnterCompetition } = useEnterCompetition();
   const { handleLeaveCompetition } = useLeaveCompetition();
 
-  console.log({ isRegistered, isLoading });
+  // console.log({ isRegistered, isLoading });
 
-  if (!userAddress) return <ConnectWalletButton />;
-  if (isLoading) return <Button disabled>Loading...</Button>;
-  if (isRegistered)
-    return (
-      <Button className="bg-red-500" onClick={handleLeaveCompetition}>
-        Leave Competition
-      </Button>
-    );
+  // if (!userAddress) return <ConnectWalletButton />;
+  // if (isLoading) return <Button disabled>Loading...</Button>;
+  // if (isRegistered)
+  //   return (
+  //     <Button className="bg-red-500" onClick={handleLeaveCompetition}>
+  //       Leave Competition
+  //     </Button>
+  //   );
 
   return <Button onClick={handleEnterCompetition}>Enter Competition</Button>;
 };
