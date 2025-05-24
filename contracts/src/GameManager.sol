@@ -12,6 +12,7 @@ contract GameManager is Ownable {
     uint256 public testETHTokenId = 1;
     uint256 public testDinoTokenId = 2;
     uint256 public testVirtualTokenId = 3;
+    bool public isSubmissionActive = true;
 
     struct Player {
         address playerAddress;
@@ -55,8 +56,14 @@ contract GameManager is Ownable {
 
     function submitScore() external {
         require(players[msg.sender].isRegistered, "Not registered");
+        require(isSubmissionActive, "Submission window is closed");
         players[msg.sender].score = tokenManager.consolidate(msg.sender);
-        updateTop5Players(msg.sender);
+        if (
+            top5Players.length < 5 ||
+            players[msg.sender].score > top5Players[4].score
+        ) {
+            updateTop5Players(msg.sender);
+        }
         tokenManager.removeUserHoldings(msg.sender);
         players[msg.sender].isRegistered = false;
         players[msg.sender].leftAt = block.timestamp;
@@ -84,7 +91,11 @@ contract GameManager is Ownable {
         top5Players = newTop5Players;
     }
 
-    function getTop5Players() external view returns (Player[] memory) {
-        return top5Players;
+    function openSubmission() external onlyOwner {
+        isSubmissionActive = true;
+    }
+
+    function closeSubmission() external onlyOwner {
+        isSubmissionActive = false;
     }
 }
