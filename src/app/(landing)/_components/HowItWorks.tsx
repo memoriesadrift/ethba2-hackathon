@@ -10,27 +10,27 @@ interface FeatureProps {
 const features: FeatureProps[] = [
   {
     icon: <MedalIcon />,
-    title: "Accessibility",
+    title: "Real DeFi Contracts",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "All data (exchange rates, yield) comes from real mainnet DeFi protocols.",
   },
   {
     icon: <MapIcon />,
-    title: "Community",
+    title: "Simulated Yield",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "You interact with real protocols using our ERC-1155 fantasy tokens, then farm yield as if you used real tokens! 📈",
   },
   {
     icon: <PlaneIcon />,
-    title: "Scalability",
+    title: "Genuine Learning",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Our protocol mirrors real contracts according to your fantasy deposits, accruing yield as the real protocol earns it!",
   },
   {
     icon: <GiftIcon />,
-    title: "Gamification",
+    title: "Learn to Earn",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Each user starts with 10000 fantasy USD and those who use our protocol to earn the most profit in the competition time stand to earn prizes! 💰",
   },
 ];
 
@@ -38,15 +38,10 @@ export const HowItWorks = () => {
   return (
     <section id="howItWorks" className="container text-center py-24 sm:py-32">
       <h2 className="text-3xl md:text-4xl font-bold ">
-        How It{" "}
-        <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-          Works{" "}
-        </span>
-        Step-by-Step Guide
+        How It Works
       </h2>
       <p className="md:w-3/4 mx-auto mt-4 mb-8 text-xl text-muted-foreground">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-        dolor pariatur sit!
+        Our on-chain sandbox allows you to interact with real DeFi protocols <b>without putting any funds at risk</b>.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
