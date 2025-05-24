@@ -9,6 +9,9 @@ import {TokenManager} from "./TokenManager.sol";
 contract GameManager is Ownable {
     TokenManager public tokenManager;
     uint256 public testUSDCTokenId = 0;
+    uint256 public testETHTokenId = 1;
+    uint256 public testDinoTokenId = 2;
+    uint256 public testVirtualTokenId = 3;
 
     struct Player {
         bool isRegistered;
@@ -32,6 +35,9 @@ contract GameManager is Ownable {
         players[msg.sender].registeredAt = block.timestamp;
         players[msg.sender].score = 0;
         tokenManager.mint(msg.sender, testUSDCTokenId, 1e6);
+        tokenManager.mint(msg.sender, testETHTokenId, 1e6);
+        tokenManager.mint(msg.sender, testDinoTokenId, 1e6);
+        tokenManager.mint(msg.sender, testVirtualTokenId, 1e6);
         emit PlayerRegistered(msg.sender, players[msg.sender].registeredAt);
     }
 

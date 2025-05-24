@@ -20,6 +20,13 @@ struct UniV2Deployment {
     address v2Router02;
 }
 
+struct TokensDeployment {
+    address dino;
+    address eth;
+    address usdc;
+    address virtualProtocol;
+}
+
 contract IOUtils is Script {
     string deploymentDir;
 
@@ -32,5 +39,11 @@ contract IOUtils is Script {
         string memory raw = vm.readFile(string.concat(deploymentDir, "original/uniswapv2.json"));
         bytes memory rawBytes = vm.parseJson(raw);
         return abi.decode(rawBytes, (UniV2Deployment));
+    }
+
+    function readTokensDeployment() internal view returns (TokensDeployment memory) {
+        string memory raw = vm.readFile(string.concat(deploymentDir, "original/tokens.json"));
+        bytes memory rawBytes = vm.parseJson(raw);
+        return abi.decode(rawBytes, (TokensDeployment));
     }
 }
