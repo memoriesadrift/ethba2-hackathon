@@ -11,6 +11,8 @@ export const CompetitionButton = () => {
   const { handleEnterCompetition } = useEnterCompetition();
   const { handleLeaveCompetition } = useLeaveCompetition();
 
+  console.log({ isRegistered, isLoading });
+
   if (!userAddress) return <ConnectWalletButton />;
   if (isLoading) return <Button disabled>Loading...</Button>;
   if (isRegistered)

@@ -4,6 +4,7 @@ import { useAccount } from "wagmi";
 
 export const useIsInCompetition = () => {
   const { address: userAddress } = useAccount();
+  console.log({ userAddress });
   const { data, isLoading } = useReadGameManagerPlayers({
     args: [userAddress as Address],
     query: {
@@ -12,6 +13,6 @@ export const useIsInCompetition = () => {
     },
   });
 
-  const [isRegistered] = data || [undefined];
+  const [isRegistered] = data ?? [undefined];
   return { isRegistered, isLoading };
 };

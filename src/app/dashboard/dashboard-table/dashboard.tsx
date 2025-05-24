@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useEnterCompetition } from "@/lib/hooks/use-enter-competition";
 import { useLeaveCompetition } from "@/lib/hooks/use-leave-competition";
 import { CompetitionButton } from "@/components/competition-button";
+import { tokens } from "@/mocks/tokens";
 
 export type DataTableRow = {
   id: string;
@@ -47,7 +48,7 @@ export const Dashboard = () => {
     <>
       <Card>
         <CardContent>
-          <DataTable data={MOCKED_DATA} columns={columns} />
+          <DataTable data={tokens} columns={columns} />
         </CardContent>
       </Card>
       <TokenSwap />

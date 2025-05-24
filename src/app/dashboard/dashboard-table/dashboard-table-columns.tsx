@@ -1,28 +1,24 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
-import { DataTableRow } from "./dashboard";
 import { AssetCell } from "@/components/table/asset-cell";
+import { Token } from "@/mocks/tokens";
+import { BalanceCell } from "./balance-cell";
 
 export const useDashboardTableColumns = () => {
-  const columnHelper = createColumnHelper<DataTableRow>();
+  const columnHelper = createColumnHelper<Token>();
 
   const columns = useMemo(
     () => [
-      columnHelper.display({
-        id: "token",
+      columnHelper.accessor("name", {
         header: "Token",
-        cell: ({ row }) => (
-          <AssetCell
-            text={row.original.symbol}
-            imageUrl={row.original.tokenImageUrl}
-          />
-        ),
       }),
-      columnHelper.accessor("tokenAddress", {
+      columnHelper.accessor("address", {
         header: "Address",
       }),
-      columnHelper.accessor("amount", {
+      columnHelper.display({
+        id: "balance",
         header: "Balance",
+        cell: ({ row }) => <BalanceCell id={row.original.id} />,
       }),
     ],
     [columnHelper]
