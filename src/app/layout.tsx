@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sandboxify",
-  description: "Play with DeFi protocols in a safe environment",
+  title: "SandboxFi",
+  description: "Play with DeFi protocols in a safe sandbox 👷‍♀️🏖️",
 };
 
 export default function RootLayout({
