@@ -5,7 +5,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {TokenManager} from '../TokenManager.sol';
 import {AaveProtocolDataProvider} from '@aave-v3/contracts/helpers/AaveProtocolDataProvider.sol';
 
-contract AaveV3CoreClone is Ownable {
+contract AaveV3PoolClone is Ownable {
     TokenManager private tokenManager;
     AaveProtocolDataProvider private aaveDataProvider;
     address public original;
@@ -33,8 +33,6 @@ contract AaveV3CoreClone is Ownable {
     }
 
     function withdraw(uint256 aAssetId, uint256 amount) external returns (uint256) {
-        // Give the user the aToken for their token
-        tokenManager.burn(msg.sender, aAssetId, amount);
         // NOTE: Also claim the user's rewards, not the case by default, 
         // but ok for our simulation
         address asset = tokenManager.realTokenAddress(aAssetIdToAssetId[aAssetId]);
@@ -43,6 +41,7 @@ contract AaveV3CoreClone is Ownable {
 
         uint256 owedRewards = amount + amount * delta;
 
+        tokenManager.burn(msg.sender, aAssetId, amount);
         tokenManager.mint(msg.sender, aAssetIdToAssetId[aAssetId], owedRewards);
 
         return owedRewards;
