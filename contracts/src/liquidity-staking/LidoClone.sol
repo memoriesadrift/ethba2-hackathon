@@ -2,7 +2,6 @@
 pragma solidity ^0.8.26;
 
 import {TokenManager} from "../TokenManager.sol";
-import {console} from "forge-std/Test.sol";
 
 contract LidoClone {
     uint256 public constant PRECISION = 1e18;
@@ -22,9 +21,7 @@ contract LidoClone {
             tokenManager.balanceOf(msg.sender, ethId) >= amountToSwap,
             "Not enough ETH"
         );
-        console.log("Swapping %s ETH for wstETH", amountToSwap);
         uint256 amountToMint = (amountToSwap * PRECISION) / ETH_PER_WSTETH;
-        console.log("Minting %s wstETH", amountToMint);
         tokenManager.burn(msg.sender, ethId, amountToSwap);
         tokenManager.mint(msg.sender, wstETHId, amountToMint);
     }
